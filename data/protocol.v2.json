@@ -1,0 +1,1466 @@
+{
+  "schema_version": "2.0.0",
+  "source": {
+    "document": "Tattoo Artist Physical Longevity Manual",
+    "document_version": "1.0",
+    "prepared": "2026-07",
+    "authority": "This file is the single authoritative protocol dataset. The manual PDF and the app both derive from it. Where the earlier 23-exercise dataset (v1, sourced from the pre-manual clinical text) disagreed, the manual wins and v1 is superseded.",
+    "supersedes": "tattooPrehabData.json v1.0.0 (23 exercises, 3-session flat program, weeks 1-2/3-6/7-12 phases)"
+  },
+
+  "meta": {
+    "title": "Tattoo Artist Physical Longevity Protocol",
+    "subtitle": "Ergonomics, prehab, foundational strength, and workday recovery",
+    "equipment": ["Bodyweight", "Light resistance bands", "Low-weight dumbbells"],
+    "scope": "Intended for generally healthy adults and for artists with mild, non-progressive stiffness or fatigue.",
+    "not_scope": "Does not diagnose injuries, replace a physical examination, or prescribe rehabilitation for a confirmed condition. Existing injuries, neurological symptoms, recent surgery, major joint instability, or significant medical conditions require individualized clinical guidance.",
+    "controlling_principle": "The best posture is not one perfect frozen position. The goal is a range of well-supported positions that can be changed before fatigue forces compensation.",
+    "exercise_is_support": "Strength and endurance improve physical capacity, but they do not cancel unlimited exposure. Change the task, workstation, or work practice rather than relying on training alone. A stronger artist can still become symptomatic when the client is too low, the work is too far away, or the schedule contains no recovery time.",
+    "final_operating_principle": "Move the client. Move the equipment. Change position early. Build capacity consistently. Do not wait for pain to become the only signal that the setup needs to change.",
+    "how_to_use": [
+      "Complete the workstation audit before assuming exercise alone will solve a work-exposure problem.",
+      "Use the eight-minute pre-session routine before the first long appointment of the day.",
+      "Use a two-to-four-minute reset at natural stopping points, color changes, stencil checks, or hourly intervals.",
+      "Perform two or three foundational strength sessions each week.",
+      "Progress only when the current dose is controlled and does not reduce tattooing precision the next day.",
+      "Reassess symptoms, workstation setup, and workload every four weeks."
+    ]
+  },
+
+  "occupational_demands": {
+    "summary": "Tattooing combines fine motor precision with prolonged static loading. The artist may remain still for long periods while the neck, upper back, shoulders, trunk, and hands maintain low-level contraction. Fatigue accumulates because the same tissues are asked to stabilize continuously.",
+    "five_load_model": [
+      {
+        "id": "static-load",
+        "name": "Static load",
+        "detail": "Muscles remain active without meaningful position change — holding the head forward, maintaining the non-dominant arm in a skin-stretch position, keeping the trunk leaned toward the client."
+      },
+      {
+        "id": "precision-grip",
+        "name": "Precision grip",
+        "detail": "The machine is controlled through sustained finger pressure and fine wrist stabilization. Excess grip pressure increases local fatigue without improving accuracy."
+      },
+      {
+        "id": "visual-demand",
+        "name": "Visual demand",
+        "detail": "Poor lighting, glare, insufficient contrast, or uncorrected vision pulls the head and torso closer to the work."
+      },
+      {
+        "id": "asymmetry",
+        "name": "Asymmetry",
+        "detail": "The machine hand, stretch hand, dominant eye, stool angle, and client position may repeatedly load one side differently from the other."
+      },
+      {
+        "id": "cumulative-exposure",
+        "name": "Cumulative exposure",
+        "detail": "The total dose includes tattooing, drawing, tablet work, phone use, driving, and recovery time between appointments — not tattooing time alone."
+      }
+    ],
+    "research_findings": [
+      { "claim": "Tattoo artists report discomfort across the neck, shoulders, elbows, hands and wrists, upper back, lower back, legs and feet; eye discomfort is also common.", "refs": [1] },
+      { "claim": "Observed tattooing postures frequently include forward trunk flexion, neck flexion, shoulder elevation, reaching, and prolonged static muscle activity.", "refs": [1] },
+      { "claim": "Force, repetition, awkward posture, vibration, and sustained or static loading are recognized contributors to work-related musculoskeletal disorders.", "refs": [3, 4] },
+      { "claim": "The tattoo-specific evidence base remains small and relies heavily on cross-sectional and self-reported data; exact prevalence estimates should be interpreted cautiously.", "refs": [2] }
+    ]
+  },
+
+  "triage": {
+    "name": "Traffic-light monitoring system",
+    "zones": [
+      {
+        "id": "green",
+        "label": "Green",
+        "color": "#39ff14",
+        "looks_like": "0-2/10 discomfort; ordinary muscular effort; symptoms settle shortly after exercise or by the next morning.",
+        "action": "Continue as planned.",
+        "blocks_progression": false
+      },
+      {
+        "id": "yellow",
+        "label": "Yellow",
+        "color": "#ffc63d",
+        "looks_like": "3-5/10 discomfort; stiffness lasts into the next day; tattoo precision or work posture feels worse.",
+        "action": "Reduce range, resistance, or total sets by 25-50%. Review workstation exposure.",
+        "blocks_progression": true
+      },
+      {
+        "id": "red",
+        "label": "Red",
+        "color": "#ff6b4a",
+        "looks_like": "Sharp, electrical, radiating, or escalating pain; numbness; weakness; finger color change; swelling; dropping tools; night symptoms.",
+        "action": "Stop the provoking activity and obtain an appropriate medical or physical-therapy evaluation.",
+        "blocks_progression": true,
+        "halts_session": true
+      }
+    ],
+    "effort_standard": [
+      "Most work sets should end with two to four good repetitions in reserve.",
+      "Isometric holds should stop before shaking causes the joint position to change.",
+      "The final repetition should look like the first repetition, only slower from fatigue.",
+      "Increase one variable at a time: repetitions, hold time, resistance, range, or sets."
+    ],
+    "twenty_four_hour_rule": "A session was appropriately dosed when the artist returns to baseline by the next day and work precision is unaffected. If symptoms or fatigue remain meaningfully elevated after 24 hours, repeat the prior easier dose or reduce the next session by one-third.",
+    "progression_hierarchy": [
+      "Own the position and breathing pattern.",
+      "Complete the minimum repetition range with no compensation.",
+      "Reach the top of the repetition or hold range.",
+      "Add a small amount of band tension or dumbbell weight.",
+      "Progress to a longer lever, less external support, or more single-limb demand.",
+      "Only then add another set."
+    ],
+    "immediate_stop": [
+      "Sharp, electrical, radiating, or rapidly worsening pain"
+    ],
+    "prompt_evaluation": [
+      "Persistent numbness",
+      "Loss of grip strength",
+      "Dropping tools",
+      "Visible muscle weakness",
+      "White or blue fingers",
+      "Marked swelling",
+      "Symptoms that repeatedly wake you at night"
+    ],
+    "referral_indicators": [
+      "Persistent numbness or tingling",
+      "Progressive grip weakness",
+      "Dropping the machine or ordinary objects",
+      "White, blue, or cold-sensitive fingers",
+      "Swelling, locking, or instability",
+      "Radiating pain",
+      "Unexplained loss of coordination",
+      "Pain that repeatedly wakes the artist",
+      "Symptoms that continue to worsen despite workload and workstation changes"
+    ],
+    "load_rule": "Use conservative resistance and finish most sets with approximately two to four technically clean repetitions still available.",
+    "grip_rule": "Do not train the hands to exhaustion immediately before a long tattoo appointment. Save loaded wrist work, long planks, and demanding lower-body exercises for after work or non-tattoo days."
+  },
+
+  "ergonomics": {
+    "principle": "There is no single workstation arrangement that fits every person or task. The practical objective is neutral or near-neutral joint alignment, supported body segments, close reach distances, and regular posture variation.",
+    "refs": [5, 6],
+    "audit_question": "Can the client, support, light, tray, or stool be moved so the artist does not have to hold this position? If yes, change the environment before asking the body to tolerate more.",
+    "sections": [
+      {
+        "id": "position-client-first",
+        "ref": "3.1",
+        "name": "Position the client before positioning yourself",
+        "points": [
+          "Raise or lower the tattoo site until the artist can approach it without sustained trunk collapse or shoulder shrugging.",
+          "Rotate the client or table instead of twisting the artist around the body part.",
+          "Use bolsters and adjustable arm or leg supports so the client remains stable without the artist holding the body part in position.",
+          "Reposition between phases when linework, shading, and color packing require different approach angles.",
+          "Protect hygiene controls by barrier-wrapping supports and following the shop's infection-control procedures whenever equipment is moved."
+        ]
+      },
+      {
+        "id": "stool-and-seated-setup",
+        "ref": "3.2",
+        "name": "Artist stool and seated setup",
+        "points": [
+          "Use an adjustable, stable stool that allows the hips to sit slightly above or approximately level with the knees when practical.",
+          "Keep both feet supported by the floor, a foot ring, or a separate footrest. Unsupported feet increase pressure behind the thighs and encourage pelvic rotation.",
+          "Use the backrest during setup, drawing, and any portion of the tattoo that does not require forward access.",
+          "Swivel or roll the stool to face the work. Do not repeatedly twist through the lower back while the feet remain fixed.",
+          "Avoid perching on the front edge for the entire appointment. Perching can be useful briefly, but it should be one position among several."
+        ]
+      },
+      {
+        "id": "working-height-and-reach",
+        "ref": "3.3",
+        "name": "Working height and reach",
+        "points": [
+          "Bring the tattoo site close enough that the elbows can remain near the torso and the shoulders remain relaxed.",
+          "Keep high-frequency supplies within easy forearm reach while respecting sterile and clean-field boundaries.",
+          "Move the tray when the client position changes. Do not preserve a bad reach merely because the tray started in one location.",
+          "Use a covered armrest or support under the artist's forearm when it reduces shoulder loading without obstructing hand control.",
+          "When the tattoo must be low, use a supported split stance, half-kneeling position on a cleanable pad, or a higher client surface rather than prolonged spinal flexion."
+        ]
+      },
+      {
+        "id": "neck-vision-lighting",
+        "ref": "3.4",
+        "name": "Neck, vision, and lighting",
+        "points": [
+          "Use a bright, adjustable task light that illuminates the work without glare or shadow from the artist's hand.",
+          "Move the light and client instead of moving the face closer to compensate for poor visibility.",
+          "Use appropriate prescription lenses or magnification when needed; visual correction is an ergonomic intervention because it changes viewing distance.",
+          "Keep the chin gently retracted and alternate brief close-focus work with distant viewing during breaks.",
+          "Place reference screens where they can be viewed without repeated neck rotation or prolonged downward gaze."
+        ]
+      },
+      {
+        "id": "machine-grip-cable",
+        "ref": "3.5",
+        "name": "Machine, grip, and cable management",
+        "points": [
+          "Use the lightest grip pressure that still produces stable, accurate machine control.",
+          "Keep the wrist as close to neutral as the tattoo angle allows; change the client or forearm support before forcing the wrist to remain bent.",
+          "Select grip diameter based on control and comfort rather than assuming larger or smaller is automatically better.",
+          "Route cords or battery weight so the artist is not repeatedly countering pull or torque.",
+          "Maintain machines according to the manufacturer's instructions; avoid preventable vibration or imbalance from damaged or poorly assembled components."
+        ]
+      },
+      {
+        "id": "asymmetry-management",
+        "ref": "3.6",
+        "name": "Asymmetry management",
+        "points": [
+          "Notice which shoulder is elevated, which hip bears more weight, and which direction the trunk repeatedly rotates.",
+          "Change approach angle before asymmetry becomes pain.",
+          "Alternate sitting and standing when the tattoo location allows it.",
+          "Use the non-dominant side for ordinary shop tasks when safe, but do not practice precision tattooing ambidextrously as an injury workaround.",
+          "Program unilateral exercises on both sides and begin with the less controlled side."
+        ]
+      }
+    ],
+    "workstation_checklist": [
+      "Tattoo site is close enough that the elbows stay near the body.",
+      "Shoulders are not continuously elevated.",
+      "Head is not held at end-range flexion or rotation.",
+      "Artist can face the work without twisting through the trunk.",
+      "Feet are supported.",
+      "Client body part is supported rather than held by the artist.",
+      "Tray and rinse setup are within controlled reach.",
+      "Task lighting provides a clear view without leaning closer.",
+      "At least two viable working positions are available.",
+      "A natural pause point has been identified before the session starts."
+    ]
+  },
+
+  "routines": [
+    {
+      "id": "pre-session",
+      "name": "Eight-minute pre-session routine",
+      "duration_min": 8,
+      "when": "Before the first long appointment of the day.",
+      "warning": "This should leave the artist feeling more coordinated, not tired. Do not fatigue the hands immediately before precision work.",
+      "items": [
+        { "exercise_id": "breathing-90-90", "prescription": "4 slow breaths" },
+        { "exercise_id": "deep-neck-flexor-chin-nod", "prescription": "5 holds of 5 seconds" },
+        { "exercise_id": "serratus-wall-slide", "prescription": "8 repetitions" },
+        { "exercise_id": "band-external-rotation", "prescription": "12 repetitions per side" },
+        { "exercise_id": "hip-hinge-pattern-drill", "prescription": "10 repetitions" },
+        { "exercise_id": "banded-lateral-walk", "prescription": "8 steps each direction" },
+        { "exercise_id": "knee-to-wall-ankle-mobilization", "prescription": "8 repetitions per side" },
+        { "exercise_id": "finger-extension-band-opens", "prescription": "15 gentle repetitions" }
+      ]
+    },
+    {
+      "id": "session-reset",
+      "name": "Two-to-four-minute session reset",
+      "duration_min": 3,
+      "when": "At natural stopping points, color changes, stencil checks, or hourly intervals.",
+      "steps": [
+        "Set the machine down safely and release the grip completely.",
+        "Stand or change position; take 20-40 relaxed steps when space permits.",
+        "Perform 5 chin nods and 8 slow shoulder-blade circles.",
+        "Perform 8 standing hip hinges and 10 calf raises.",
+        "Open the hands gently 10-15 times; do not aggressively stretch numb or irritated nerves.",
+        "Look across the room or out a window for 20-30 seconds.",
+        "Recheck client height, tray reach, lighting, and stool angle before resuming."
+      ],
+      "items": [
+        { "exercise_id": "deep-neck-flexor-chin-nod", "prescription": "5 nods" },
+        { "exercise_id": "hip-hinge-pattern-drill", "prescription": "8 repetitions" },
+        { "exercise_id": "straight-knee-calf-raise", "prescription": "10 repetitions" },
+        { "exercise_id": "tendon-glide-sequence", "prescription": "Open the hands gently 10-15 times" }
+      ]
+    },
+    {
+      "id": "post-work-downshift",
+      "name": "Ten-minute post-work downshift",
+      "duration_min": 10,
+      "when": "After the last appointment, before sitting in the car or at a desk.",
+      "lead_in": "Walk for two to three minutes before sitting.",
+      "items": [
+        { "exercise_id": "thoracic-extension-over-chair", "prescription": "6-8 controlled repetitions" },
+        { "exercise_id": "half-kneeling-hip-flexor-mobilization", "prescription": "2 holds of 30 seconds per side" },
+        { "exercise_id": "knee-to-wall-ankle-mobilization", "prescription": "10 repetitions per side" },
+        { "exercise_id": "dumbbell-pronation-supination", "prescription": "8 repetitions each direction, no weight" },
+        { "exercise_id": "breathing-90-90", "prescription": "4-6 breaths with a long exhale" }
+      ]
+    }
+  ],
+
+  "regions": [
+    {
+      "id": "shoulders-neck-scapular",
+      "index": 1,
+      "manual_ref": "5",
+      "name": "Shoulders, Neck & Scapular Stability",
+      "short_name": "Shoulders & Neck",
+      "accent": "#00e5ff",
+      "camera_focus": "upper",
+      "objective": "Not to pin the shoulder blades backward all day. It is to build enough rotator-cuff, serratus, lower-trapezius, and neck endurance that the artist can control the shoulder girdle through several working positions.",
+      "refs": [7],
+      "exercises": [
+        {
+          "id": "deep-neck-flexor-chin-nod",
+          "manual_ref": "5.1",
+          "exercise_name": "Deep-Neck-Flexor Chin Nod",
+          "type": "strength",
+          "equipment": [],
+          "setup": "Lie on the back or stand with the head supported against a wall.",
+          "primary_muscles": ["Longus_Colli", "Longus_Capitis"],
+          "secondary_muscles": ["Deep_Cervical_Stabilizers", "Thoracic_Erector_Spinae"],
+          "cues": [
+            "Lie on the back or stand with the head supported; make a small \"yes\" nod while lengthening the back of the neck.",
+            "Keep the jaw relaxed and the back of the head in contact with the support.",
+            "Do not force the chin toward the chest, lift the head, or press hard enough to create throat tension."
+          ],
+          "tempo": "5-10 second isometric hold; 5 seconds complete relaxation between holds",
+          "dose": "5-8 holds",
+          "best_use": ["pre_session", "session_reset", "strength"],
+          "regression": "Use a smaller nod while lying down.",
+          "progression": "Perform against a very light resistance band or add a controlled head lift only under qualified guidance.",
+          "the_why": "Builds endurance in the deep stabilizers that oppose prolonged forward-head positioning.",
+          "camera_focus": "neck",
+          "hand_fatigue": false
+        },
+        {
+          "id": "thoracic-extension-over-chair",
+          "manual_ref": "5.2",
+          "exercise_name": "Thoracic Extension over Chair",
+          "type": "mobility",
+          "equipment": ["Chair"],
+          "setup": "Sit with the chair back contacting the mid-upper back.",
+          "primary_muscles": ["Thoracic_Erector_Spinae"],
+          "secondary_muscles": ["Intercostals", "Anterior_Deltoid"],
+          "cues": [
+            "Sit with the chair back contacting the mid-upper back and support the head lightly with the hands.",
+            "Exhale to keep the lower ribs controlled, then extend the upper back over the chair without forcing the neck backward.",
+            "Do not turn the movement into a large lower-back arch."
+          ],
+          "tempo": "2 seconds into extension; 2-second pause; 3 seconds returning",
+          "dose": "1-2 sets of 6-10 repetitions",
+          "best_use": ["post_work", "session_reset"],
+          "regression": "Use a rolled towel behind the upper back.",
+          "progression": "Add a light overhead reach while maintaining rib control.",
+          "the_why": "Provides movement in the upper back so visual access does not come entirely from neck and lower-back flexion.",
+          "camera_focus": "upper",
+          "hand_fatigue": false
+        },
+        {
+          "id": "band-external-rotation",
+          "manual_ref": "5.3",
+          "exercise_name": "Band External Rotation at the Side",
+          "type": "strength",
+          "equipment": ["Resistance band", "Folded towel"],
+          "setup": "Anchor a band at elbow height; place a folded towel between the elbow and ribs.",
+          "primary_muscles": ["Infraspinatus", "Teres_Minor"],
+          "secondary_muscles": ["Posterior_Deltoid", "Rhomboids", "Middle_Trapezius"],
+          "cues": [
+            "Place a folded towel between the elbow and ribs; keep the elbow bent approximately 90 degrees.",
+            "Rotate the forearm outward while the elbow remains against the towel and the shoulder stays away from the ear.",
+            "Do not twist the torso, bend the wrist, or chase excessive range."
+          ],
+          "tempo": "2 seconds outward; 2-second hold; 3 seconds inward",
+          "dose": "2-3 sets of 12-20 per side",
+          "best_use": ["pre_session", "strength"],
+          "pre_session_note": "Low volume only.",
+          "regression": "Use a lighter band or perform an isometric outward press into a wall.",
+          "progression": "Step farther from the anchor or use a slightly stronger band.",
+          "the_why": "Builds low-load rotator-cuff endurance for sustained arm positioning and precision work.",
+          "camera_focus": "shoulder",
+          "hand_fatigue": false
+        },
+        {
+          "id": "serratus-wall-slide",
+          "manual_ref": "5.4",
+          "exercise_name": "Serratus Wall Slide",
+          "type": "strength",
+          "equipment": ["Resistance band loop", "Wall"],
+          "setup": "Stand facing a wall with the forearms on it and a loop around the wrists.",
+          "primary_muscles": ["Serratus_Anterior"],
+          "secondary_muscles": ["Lower_Trapezius", "Infraspinatus", "Supraspinatus", "Transverse_Abdominis", "Rectus_Abdominis"],
+          "cues": [
+            "Place the forearms on the wall and apply light outward pressure into a loop around the wrists.",
+            "Press gently away from the wall and slide upward while the ribs remain stacked over the pelvis.",
+            "Do not shrug, flare the ribs, arch the lower back, or force overhead range."
+          ],
+          "tempo": "3 seconds upward; 2-second hold; 3 seconds downward",
+          "dose": "2-3 sets of 8-12",
+          "best_use": ["pre_session", "strength"],
+          "regression": "Remove the band and use a shorter slide.",
+          "progression": "Use a foam roller under the forearms or step slightly farther from the wall.",
+          "the_why": "Improves scapular upward rotation and reduces reliance on continuous upper-trapezius elevation.",
+          "camera_focus": "shoulder",
+          "hand_fatigue": false
+        },
+        {
+          "id": "supported-one-arm-row",
+          "manual_ref": "5.5",
+          "exercise_name": "Supported One-Arm Dumbbell Row",
+          "type": "strength",
+          "equipment": ["Dumbbell", "Bench or stable surface"],
+          "setup": "Support one hand and one knee, or one hand on a stable surface.",
+          "primary_muscles": ["Middle_Trapezius", "Rhomboids", "Latissimus_Dorsi"],
+          "secondary_muscles": ["Posterior_Deltoid", "Biceps_Brachii", "Infraspinatus", "Finger_Flexors", "Wrist_Flexors"],
+          "cues": [
+            "Support one hand and one knee or one hand on a stable surface so the lower back is not holding a long bent-over position.",
+            "Pull the elbow toward the rear pocket while keeping the shoulder away from the ear.",
+            "Do not rotate the torso or drive the elbow far behind the body."
+          ],
+          "tempo": "2 seconds pulling; 2-second squeeze; 3 seconds lowering",
+          "dose": "3 sets of 10-15 per side",
+          "best_use": ["strength"],
+          "regression": "Use a band row or reduce the dumbbell weight.",
+          "progression": "Pause longer at the top or use a slightly heavier dumbbell.",
+          "the_why": "Develops upper-back endurance for maintaining a less collapsed trunk and shoulder position.",
+          "camera_focus": "upper",
+          "hand_fatigue": true
+        },
+        {
+          "id": "face-pull-external-rotation",
+          "manual_ref": "5.6",
+          "exercise_name": "Band Face Pull to External Rotation",
+          "type": "strength",
+          "equipment": ["Resistance band"],
+          "setup": "Anchor the band near eye level.",
+          "primary_muscles": ["Posterior_Deltoid", "Middle_Trapezius", "Lower_Trapezius"],
+          "secondary_muscles": ["Infraspinatus", "Teres_Minor", "Rhomboids"],
+          "cues": [
+            "Anchor the band near eye level and pull toward the eyebrows with the elbows slightly below shoulder height.",
+            "Finish with the hands outside the elbows and the ribs controlled.",
+            "Do not lean backward, thrust the chin, or shrug."
+          ],
+          "tempo": "2 seconds pulling; 2-second hold; 3 seconds returning",
+          "dose": "2-3 sets of 10-15",
+          "best_use": ["strength"],
+          "regression": "Use a lighter band and finish before external rotation.",
+          "progression": "Use independent bands or a longer isometric hold.",
+          "the_why": "Strengthens the posterior shoulder and scapular musculature that resists prolonged rounded-shoulder loading.",
+          "camera_focus": "upper",
+          "hand_fatigue": false
+        },
+        {
+          "id": "incline-push-up-plus",
+          "manual_ref": "5.7",
+          "exercise_name": "Incline Push-Up Plus",
+          "type": "strength",
+          "equipment": ["Wall, counter, or bench"],
+          "setup": "Hands on a wall, counter, or bench; straight line from head through hips.",
+          "primary_muscles": ["Serratus_Anterior", "Pectoralis_Major"],
+          "secondary_muscles": ["Triceps_Brachii", "Infraspinatus", "Supraspinatus", "Transverse_Abdominis"],
+          "cues": [
+            "Place the hands on a wall, counter, or bench and maintain a straight line from head through hips.",
+            "Complete a controlled push-up, then gently push the support away at the top so the shoulder blades wrap around the rib cage.",
+            "Do not let the head sag, flare the elbows excessively, or collapse between the shoulders."
+          ],
+          "tempo": "3 seconds lowering; 1-second pause; 2 seconds pressing; 1-second \"plus\"",
+          "dose": "2-3 sets of 8-15",
+          "best_use": ["strength"],
+          "regression": "Use a wall.",
+          "progression": "Lower the support or add a light band around the upper back.",
+          "the_why": "Builds closed-chain shoulder stability and serratus endurance without heavy loading.",
+          "camera_focus": "upper",
+          "hand_fatigue": true
+        }
+      ]
+    },
+
+    {
+      "id": "spine-deep-core",
+      "index": 2,
+      "manual_ref": "6",
+      "name": "Spine & Deep Core",
+      "short_name": "Spine & Core",
+      "accent": "#39ff14",
+      "camera_focus": "torso",
+      "objective": "Emphasizes anti-extension, anti-rotation, anti-side-bending, breathing mechanics, and hip-spine coordination.",
+      "refs": [8],
+      "exercises": [
+        {
+          "id": "breathing-90-90",
+          "manual_ref": "6.1",
+          "exercise_name": "90/90 Breathing Reset",
+          "type": "breathing",
+          "equipment": ["Chair"],
+          "setup": "Lie on the back with lower legs supported on a chair, hips and knees near 90 degrees.",
+          "primary_muscles": ["Diaphragm", "Transverse_Abdominis", "Pelvic_Floor"],
+          "secondary_muscles": ["Intercostals", "Iliopsoas"],
+          "cues": [
+            "Lie on the back with lower legs supported on a chair and hips and knees near 90 degrees.",
+            "Exhale slowly until the lower ribs settle; inhale quietly into the sides and back of the rib cage.",
+            "Do not force the lower back flat or take large chest-dominant breaths."
+          ],
+          "tempo": "4-6 second exhale; 2-second pause; 3-4 second quiet inhale",
+          "dose": "4-6 breaths",
+          "best_use": ["pre_session", "post_work"],
+          "regression": "Place the feet on the floor instead of a chair.",
+          "progression": "Add a light heel press into the chair during exhalation.",
+          "the_why": "Reduces unnecessary bracing and establishes rib-over-pelvis control before loaded movement.",
+          "camera_focus": "torso",
+          "hand_fatigue": false
+        },
+        {
+          "id": "dead-bug-full-exhale",
+          "manual_ref": "6.2",
+          "exercise_name": "Dead Bug with Full Exhale",
+          "type": "strength",
+          "equipment": [],
+          "setup": "Lie on the back with hips and knees bent.",
+          "primary_muscles": ["Transverse_Abdominis", "External_Oblique", "Internal_Oblique", "Multifidus"],
+          "secondary_muscles": ["Iliopsoas", "Diaphragm"],
+          "cues": [
+            "Set the ribs over the pelvis with a full, controlled exhale before moving.",
+            "Lower the opposite arm and leg only as far as the trunk position can remain unchanged.",
+            "Do not arch the lower back, hold the breath, or force the heel to the floor."
+          ],
+          "tempo": "3 seconds extending; 1-second pause; 3 seconds returning",
+          "dose": "2-3 sets of 6-10 per side",
+          "best_use": ["pre_session", "strength"],
+          "pre_session_note": "Low dose only.",
+          "regression": "Move only one limb or tap the heel close to the body.",
+          "progression": "Use a light band pulldown or hold a light dumbbell.",
+          "the_why": "Trains anti-extension control for reaching and leaning without uncontrolled lumbar arching.",
+          "camera_focus": "torso",
+          "hand_fatigue": false
+        },
+        {
+          "id": "bird-dog",
+          "manual_ref": "6.3",
+          "exercise_name": "Bird Dog",
+          "type": "strength",
+          "equipment": [],
+          "setup": "Begin on hands and knees.",
+          "primary_muscles": ["Multifidus", "Rectus_Abdominis", "Transverse_Abdominis", "Gluteus_Maximus"],
+          "secondary_muscles": ["Posterior_Deltoid", "Middle_Trapezius", "Hamstrings"],
+          "cues": [
+            "Begin on hands and knees with a light abdominal brace.",
+            "Reach the opposite arm and leg long rather than lifting them high.",
+            "Keep the pelvis level; do not rotate, arch, or shift heavily to the support side."
+          ],
+          "tempo": "2 seconds extending; 3-second hold; 2 seconds returning",
+          "dose": "2-3 sets of 6-10 per side",
+          "best_use": ["strength", "session_reset"],
+          "regression": "Move only the arm or leg.",
+          "progression": "Add a light band between the hand and opposite foot.",
+          "the_why": "Builds cross-body control for the machine-hand and stretch-hand demands of tattooing.",
+          "camera_focus": "torso",
+          "hand_fatigue": false
+        },
+        {
+          "id": "side-plank",
+          "manual_ref": "6.4",
+          "exercise_name": "Side Plank",
+          "type": "strength",
+          "equipment": [],
+          "setup": "Elbow directly under the shoulder.",
+          "primary_muscles": ["Internal_Oblique", "External_Oblique", "Quadratus_Lumborum"],
+          "secondary_muscles": ["Gluteus_Medius", "Serratus_Anterior", "Lateral_Deltoid"],
+          "cues": [
+            "Position the elbow directly under the shoulder and create a straight line through the trunk.",
+            "Press the floor away and keep the chest facing forward.",
+            "Do not rotate toward the floor, let the shoulder collapse, or hold the breath."
+          ],
+          "tempo": "15-40 second isometric hold with quiet breathing",
+          "dose": "2-3 holds per side",
+          "best_use": ["strength"],
+          "regression": "Perform from the knees or with the top hand supported.",
+          "progression": "Use straight legs, lift the top leg, or increase hold time.",
+          "the_why": "Builds anti-side-bending capacity for repeated leaning toward one side of the client.",
+          "camera_focus": "torso",
+          "hand_fatigue": true
+        },
+        {
+          "id": "half-kneeling-pallof-press",
+          "manual_ref": "6.5",
+          "exercise_name": "Half-Kneeling Pallof Press",
+          "type": "strength",
+          "equipment": ["Resistance band"],
+          "setup": "Kneel sideways to a band anchor at chest height.",
+          "primary_muscles": ["External_Oblique", "Internal_Oblique", "Transverse_Abdominis"],
+          "secondary_muscles": ["Gluteus_Maximus", "Multifidus", "Serratus_Anterior", "Middle_Trapezius"],
+          "cues": [
+            "Kneel sideways to the band and stack the ribs over the pelvis.",
+            "Press the band straight forward without allowing the torso or pelvis to rotate.",
+            "Keep the front foot stable and avoid leaning away from the anchor."
+          ],
+          "tempo": "2 seconds pressing; 3-second hold; 2 seconds returning",
+          "dose": "2-3 sets of 8-12 per side",
+          "best_use": ["strength"],
+          "regression": "Use a wider kneeling stance or lighter band.",
+          "progression": "Use a narrower stance, tall-kneeling position, or split-stance press.",
+          "the_why": "Builds anti-rotation strength for reaching around clients without repeatedly twisting through the lower back.",
+          "camera_focus": "torso",
+          "hand_fatigue": false
+        },
+        {
+          "id": "hip-hinge-pattern-drill",
+          "manual_ref": "6.6",
+          "exercise_name": "Hip-Hinge Pattern Drill",
+          "type": "strength",
+          "equipment": [],
+          "setup": "Stand with hands on the hip creases.",
+          "primary_muscles": ["Gluteus_Maximus", "Hamstrings"],
+          "secondary_muscles": ["Erector_Spinae", "Multifidus", "Adductors"],
+          "cues": [
+            "Place the hands on the hip creases and push the hips backward while maintaining a long spine.",
+            "Keep the weight balanced through the full foot and the knees softly bent.",
+            "Do not turn the movement into a squat or round the lower back to reach farther."
+          ],
+          "tempo": "3 seconds hinging; 1-second pause; 2 seconds standing",
+          "dose": "2 sets of 8-12",
+          "best_use": ["pre_session", "session_reset", "strength"],
+          "regression": "Use a wall behind the hips as a target.",
+          "progression": "Hold light dumbbells or progress to the single-leg version.",
+          "the_why": "Teaches the artist to change height through the hips rather than repeatedly folding through the lumbar spine.",
+          "camera_focus": "hips",
+          "hand_fatigue": false
+        }
+      ]
+    },
+
+    {
+      "id": "hips-pelvic-control",
+      "index": 3,
+      "manual_ref": "7",
+      "name": "Hips & Pelvic Control",
+      "short_name": "Hips & Pelvis",
+      "accent": "#ff8a3d",
+      "camera_focus": "hips",
+      "objective": "Hip strength and mobility help the artist shift, stand, hinge, and rotate around the client without asking the lumbar spine or knees to provide all of the movement. The goal is stable pelvic control, not maximal hip isolation.",
+      "refs": [],
+      "exercises": [
+        {
+          "id": "banded-glute-bridge",
+          "manual_ref": "7.1",
+          "exercise_name": "Banded Glute Bridge",
+          "type": "strength",
+          "equipment": ["Light resistance band loop"],
+          "setup": "Lie on the back, knees bent, band above the knees.",
+          "primary_muscles": ["Gluteus_Maximus"],
+          "secondary_muscles": ["Gluteus_Medius", "Hamstrings", "Rectus_Abdominis", "Transverse_Abdominis"],
+          "cues": [
+            "Place a light band above the knees and maintain gentle outward tension.",
+            "Exhale, lightly set the pelvis, and drive through the full foot to lift.",
+            "Stop before the lower back arches; the movement should finish through the hips."
+          ],
+          "tempo": "2 seconds lifting; 3-second hold; 3 seconds lowering",
+          "dose": "3 sets of 10-15",
+          "best_use": ["strength"],
+          "regression": "Remove the band or use a smaller range.",
+          "progression": "Use a staggered stance or single-leg bridge.",
+          "the_why": "Restores hip-extension capacity that is underused during prolonged sitting.",
+          "camera_focus": "hips",
+          "hand_fatigue": false
+        },
+        {
+          "id": "banded-lateral-walk",
+          "manual_ref": "7.2",
+          "exercise_name": "Banded Lateral Walk",
+          "type": "strength",
+          "equipment": ["Resistance band loop"],
+          "setup": "Band above the knees, small athletic stance.",
+          "primary_muscles": ["Gluteus_Medius", "Gluteus_Minimus"],
+          "secondary_muscles": ["Gluteus_Maximus", "Deep_Hip_Rotators"],
+          "cues": [
+            "Place the band above the knees initially and maintain a small athletic stance.",
+            "Take short steps while keeping the pelvis level and knees tracking over the middle toes.",
+            "Do not sway the torso, drag the trailing foot, or allow the knees to collapse inward."
+          ],
+          "tempo": "2 seconds stepping; 1-second stabilization",
+          "dose": "2-3 sets of 8-12 steps each direction",
+          "best_use": ["pre_session", "strength"],
+          "pre_session_note": "Low volume only.",
+          "regression": "Use a lighter band or place it higher on the thighs.",
+          "progression": "Move the band toward the ankles or add a quarter-squat.",
+          "the_why": "Improves lateral pelvic control during standing and asymmetrical seated work.",
+          "camera_focus": "hips",
+          "hand_fatigue": false
+        },
+        {
+          "id": "supported-split-squat",
+          "manual_ref": "7.3",
+          "exercise_name": "Supported Split Squat",
+          "type": "strength",
+          "equipment": ["Stable support"],
+          "setup": "One hand on a stable support, comfortable staggered stance.",
+          "primary_muscles": ["Vastus_Group", "Rectus_Femoris", "Gluteus_Maximus"],
+          "secondary_muscles": ["Gluteus_Medius", "Adductors", "Gastrocnemius", "Transverse_Abdominis"],
+          "cues": [
+            "Use one hand on a stable support and set a comfortable staggered stance.",
+            "Lower straight down while the front knee tracks over the middle toes and the pelvis stays level.",
+            "Do not push through pain, collapse inward, or overstride until balance is lost."
+          ],
+          "tempo": "3 seconds lowering; 1-second pause; 2 seconds rising",
+          "dose": "2-3 sets of 8-12 per side",
+          "best_use": ["strength"],
+          "regression": "Use a shallow range or sit back to a high target.",
+          "progression": "Hold light dumbbells or reduce hand support.",
+          "the_why": "Builds leg and pelvic control for repeated transitions between sitting, standing, and low working positions.",
+          "camera_focus": "lower",
+          "hand_fatigue": false
+        },
+        {
+          "id": "supported-single-leg-rdl",
+          "manual_ref": "7.4",
+          "exercise_name": "Supported Single-Leg Romanian Deadlift",
+          "type": "strength",
+          "equipment": ["Light dumbbell", "Stable support"],
+          "setup": "One hand on a stable surface, light dumbbell in the other.",
+          "primary_muscles": ["Gluteus_Maximus", "Hamstrings"],
+          "secondary_muscles": ["Gluteus_Medius", "Intrinsic_Foot", "Transverse_Abdominis", "Erector_Spinae"],
+          "cues": [
+            "Hold a stable surface with one hand and a light dumbbell in the other.",
+            "Hinge at the hip while keeping the pelvis square and the standing knee softly bent.",
+            "Do not open the pelvis, round the back, or reach the weight toward the floor at the expense of control."
+          ],
+          "tempo": "4 seconds lowering; 1-second pause; 2 seconds standing",
+          "dose": "2-3 sets of 8-12 per side",
+          "best_use": ["strength"],
+          "regression": "Use both feet in a staggered stance.",
+          "progression": "Reduce hand support or use two light dumbbells.",
+          "the_why": "Builds posterior-chain endurance and single-leg pelvic control without heavy spinal loading.",
+          "camera_focus": "hips",
+          "hand_fatigue": true
+        },
+        {
+          "id": "half-kneeling-hip-flexor-mobilization",
+          "manual_ref": "7.5",
+          "exercise_name": "Half-Kneeling Hip-Flexor Mobilization",
+          "type": "mobility",
+          "equipment": ["Cleanable pad"],
+          "setup": "Half-kneeling on a pad.",
+          "primary_muscles": ["Iliopsoas", "Rectus_Femoris"],
+          "secondary_muscles": ["Gluteus_Maximus", "Transverse_Abdominis"],
+          "cues": [
+            "Begin in half-kneeling and gently tuck the pelvis.",
+            "Squeeze the glute of the kneeling side before moving slightly forward.",
+            "Do not arch the lower back, twist the pelvis, or lunge aggressively."
+          ],
+          "tempo": "20-40 second hold with slow breathing",
+          "dose": "2 holds per side",
+          "best_use": ["post_work", "recovery"],
+          "regression": "Use a shorter stance and smaller pelvic tuck.",
+          "progression": "Reach the same-side arm overhead without rib flare.",
+          "the_why": "Restores hip extension after prolonged sitting without substituting lumbar extension.",
+          "camera_focus": "hips",
+          "hand_fatigue": false
+        },
+        {
+          "id": "adductor-rock-back",
+          "manual_ref": "7.6",
+          "exercise_name": "Adductor Rock-Back",
+          "type": "mobility",
+          "equipment": [],
+          "setup": "Hands and knees, one leg extended to the side with the foot supported.",
+          "primary_muscles": ["Adductors"],
+          "secondary_muscles": ["Transverse_Abdominis", "Serratus_Anterior", "Deep_Hip_Rotators"],
+          "cues": [
+            "From hands and knees, extend one leg to the side with the foot supported.",
+            "Keep the spine long and rock the hips backward until a gentle inner-thigh stretch is felt.",
+            "Do not rotate the pelvis upward or force the range."
+          ],
+          "tempo": "3 seconds back; 2-second pause; 2 seconds forward",
+          "dose": "1-2 sets of 8-12 per side",
+          "best_use": ["post_work", "recovery"],
+          "regression": "Keep the knee bent and the leg closer to the body.",
+          "progression": "Move the leg farther out or add a gentle reach.",
+          "the_why": "Improves hip options for straddled, wide-stance, and side-approach working positions.",
+          "camera_focus": "hips",
+          "hand_fatigue": false
+        }
+      ]
+    },
+
+    {
+      "id": "knees-ankles",
+      "index": 4,
+      "manual_ref": "8",
+      "name": "Knees, Ankles & Standing Tolerance",
+      "short_name": "Knees & Ankles",
+      "accent": "#b347ff",
+      "camera_focus": "lower",
+      "objective": "Strengthens the whole quadriceps-hip-foot system rather than attempting to isolate one small portion of the quadriceps.",
+      "refs": [9, 10],
+      "exercises": [
+        {
+          "id": "controlled-sit-to-stand",
+          "manual_ref": "8.1",
+          "exercise_name": "Controlled Sit-to-Stand",
+          "type": "strength",
+          "equipment": ["Stable chair"],
+          "setup": "Scoot toward the front of a stable chair, feet under the knees.",
+          "primary_muscles": ["Vastus_Group", "Rectus_Femoris", "Gluteus_Maximus"],
+          "secondary_muscles": ["Adductors", "Gastrocnemius", "Transverse_Abdominis", "Erector_Spinae"],
+          "cues": [
+            "Scoot toward the front of a stable chair and place the feet under the knees.",
+            "Lean the trunk forward as one unit and stand through the full foot.",
+            "Do not let the knees collapse inward or drop rapidly back into the chair."
+          ],
+          "tempo": "3 seconds lowering; light touch; 2 seconds standing",
+          "dose": "2-3 sets of 10-15",
+          "best_use": ["strength", "session_reset"],
+          "regression": "Use a higher chair or hand support.",
+          "progression": "Use a lower target or hold light dumbbells.",
+          "the_why": "Builds repeated transfer capacity for moving on and off a low work stool.",
+          "camera_focus": "lower",
+          "hand_fatigue": false
+        },
+        {
+          "id": "banded-spanish-squat-isometric",
+          "manual_ref": "8.2",
+          "exercise_name": "Banded Spanish-Squat Isometric",
+          "type": "strength",
+          "equipment": ["Strong resistance band"],
+          "setup": "Anchor a strong band behind the knees.",
+          "primary_muscles": ["Vastus_Group", "Rectus_Femoris"],
+          "secondary_muscles": ["Gluteus_Maximus", "Rectus_Abdominis", "Transverse_Abdominis"],
+          "cues": [
+            "Anchor a strong band behind the knees and sit backward while keeping the torso relatively upright.",
+            "Keep the heels down and knees aligned with the feet.",
+            "Do not collapse inward or force a depth that produces joint pain."
+          ],
+          "tempo": "20-45 second isometric hold",
+          "dose": "3-5 holds",
+          "best_use": ["strength"],
+          "regression": "Use a higher position or shorter hold.",
+          "progression": "Increase hold time or add a light dumbbell at the chest.",
+          "the_why": "Develops quadriceps and patellar-tendon loading tolerance with controllable range and minimal equipment.",
+          "camera_focus": "lower",
+          "hand_fatigue": false
+        },
+        {
+          "id": "controlled-step-down",
+          "manual_ref": "8.3",
+          "exercise_name": "Controlled Step-Down",
+          "type": "strength",
+          "equipment": ["Low step"],
+          "setup": "Stand on a low step.",
+          "primary_muscles": ["Vastus_Group", "Rectus_Femoris"],
+          "secondary_muscles": ["Gluteus_Medius", "Gluteus_Maximus", "Gastrocnemius", "Intrinsic_Foot"],
+          "cues": [
+            "Stand on a low step and lower the opposite heel toward the floor.",
+            "Keep the working knee tracking over the middle toes and the pelvis level.",
+            "Do not drop quickly, push strongly from the floor, or let the knee collapse inward."
+          ],
+          "tempo": "4 seconds lowering; light touch; 2 seconds returning",
+          "dose": "2-3 sets of 8-12 per side",
+          "best_use": ["strength"],
+          "regression": "Use a lower step and hand support.",
+          "progression": "Increase the step height slightly or hold a light dumbbell.",
+          "the_why": "Builds single-leg knee control for standing, stepping, and low-position transitions.",
+          "camera_focus": "lower",
+          "hand_fatigue": false
+        },
+        {
+          "id": "straight-knee-calf-raise",
+          "manual_ref": "8.4",
+          "exercise_name": "Straight-Knee Calf Raise",
+          "type": "strength",
+          "equipment": [],
+          "setup": "Stand with the knees straight but not locked.",
+          "primary_muscles": ["Gastrocnemius"],
+          "secondary_muscles": ["Soleus", "Intrinsic_Foot", "Peroneals"],
+          "cues": [
+            "Rise through the base of the big toe with the knees straight but not locked.",
+            "Keep the ankle vertical instead of rolling outward.",
+            "Lower through a controlled range without bouncing."
+          ],
+          "tempo": "2 seconds rising; 2-second hold; 4 seconds lowering",
+          "dose": "3 sets of 12-20",
+          "best_use": ["strength", "session_reset"],
+          "pre_session_note": "Low dose only during workday breaks.",
+          "regression": "Use both hands for support and a partial range.",
+          "progression": "Progress toward single-leg raises or hold light dumbbells.",
+          "the_why": "Builds calf and Achilles capacity for prolonged standing and repeated position changes.",
+          "camera_focus": "ankle",
+          "hand_fatigue": false
+        },
+        {
+          "id": "bent-knee-soleus-raise",
+          "manual_ref": "8.5",
+          "exercise_name": "Bent-Knee Soleus Raise",
+          "type": "strength",
+          "equipment": ["Light dumbbells (optional)"],
+          "setup": "Sit with knees bent and feet flat.",
+          "primary_muscles": ["Soleus"],
+          "secondary_muscles": ["Gastrocnemius", "Intrinsic_Foot"],
+          "cues": [
+            "Sit with knees bent and feet flat; place light dumbbells over the thighs if needed.",
+            "Raise the heels while maintaining pressure through the first and second toes.",
+            "Do not bounce or allow the ankles to roll outward."
+          ],
+          "tempo": "2 seconds rising; 2-second hold; 4 seconds lowering",
+          "dose": "3 sets of 15-25",
+          "best_use": ["strength"],
+          "regression": "Use bodyweight only.",
+          "progression": "Increase dumbbell load gradually or perform one side at a time.",
+          "the_why": "Strengthens the endurance-oriented calf muscle that contributes heavily when standing or working with bent knees.",
+          "camera_focus": "ankle",
+          "hand_fatigue": false
+        },
+        {
+          "id": "wall-tibialis-raise",
+          "manual_ref": "8.6",
+          "exercise_name": "Wall Tibialis Raise",
+          "type": "strength",
+          "equipment": ["Wall"],
+          "setup": "Lean against a wall with the feet slightly forward.",
+          "primary_muscles": ["Tibialis_Anterior"],
+          "secondary_muscles": ["Toe_Extensors", "Peroneals"],
+          "cues": [
+            "Lean against a wall with the feet slightly forward and heels planted.",
+            "Lift the forefeet toward the shins without rocking the body.",
+            "Keep the feet pointing forward rather than turning outward."
+          ],
+          "tempo": "2 seconds lifting; 1-second hold; 3 seconds lowering",
+          "dose": "2-3 sets of 15-25",
+          "best_use": ["strength", "session_reset"],
+          "regression": "Move the feet closer to the wall.",
+          "progression": "Move the feet farther forward or perform one side at a time.",
+          "the_why": "Balances calf loading and improves foot clearance and ankle control.",
+          "camera_focus": "ankle",
+          "hand_fatigue": false
+        },
+        {
+          "id": "knee-to-wall-ankle-mobilization",
+          "manual_ref": "8.7",
+          "exercise_name": "Knee-to-Wall Ankle Mobilization",
+          "type": "mobility",
+          "equipment": ["Wall"],
+          "setup": "Stand facing a wall, foot planted a short distance away.",
+          "primary_muscles": ["Soleus"],
+          "secondary_muscles": ["Gastrocnemius", "Peroneals"],
+          "cues": [
+            "Keep the heel planted and drive the knee toward the wall over the middle toes.",
+            "Move only as far as the arch and heel remain stable.",
+            "Do not collapse the knee inward or lift the heel."
+          ],
+          "tempo": "2 seconds forward; 2-second pause; 2 seconds backward",
+          "dose": "1-2 sets of 10-15 per side",
+          "best_use": ["pre_session", "post_work"],
+          "regression": "Move closer to the wall.",
+          "progression": "Move slightly farther away while preserving alignment.",
+          "the_why": "Maintains ankle motion needed for squatting, stepping, and changing work height without foot or knee compensation.",
+          "camera_focus": "ankle",
+          "hand_fatigue": false
+        }
+      ]
+    },
+
+    {
+      "id": "hands-wrists-forearms",
+      "index": 5,
+      "manual_ref": "9",
+      "name": "Hands, Wrists & Forearms",
+      "short_name": "Hands & Wrists",
+      "accent": "#ff3d7f",
+      "camera_focus": "forearm",
+      "objective": "Balances the repetitive gripping and precision demands of tattooing. It deliberately avoids maximal grip training and high-fatigue work before appointments.",
+      "refs": [3],
+      "warning": "Tingling, persistent numbness, progressive weakness, finger color change, or loss of machine control should not be treated as ordinary forearm tightness. Those symptoms require assessment rather than more exercise.",
+      "exercises": [
+        {
+          "id": "finger-extension-band-opens",
+          "manual_ref": "9.1",
+          "exercise_name": "Finger-Extension Band Opens",
+          "type": "strength",
+          "equipment": ["Very light band loop"],
+          "setup": "Light loop around the fingers and thumb.",
+          "primary_muscles": ["Finger_Extensors"],
+          "secondary_muscles": ["Intrinsic_Hand", "Wrist_Extensors"],
+          "cues": [
+            "Place a very light loop around the fingers and thumb.",
+            "Open the hand evenly while keeping the wrist neutral.",
+            "Do not snap the fingers open or use a band strong enough to distort finger alignment."
+          ],
+          "tempo": "2 seconds opening; 2-second hold; 3 seconds closing",
+          "dose": "2-3 sets of 15-25",
+          "best_use": ["pre_session", "strength"],
+          "pre_session_note": "Low volume only.",
+          "regression": "Use no band and actively spread the fingers.",
+          "progression": "Use a slightly stronger loop or increase the hold.",
+          "the_why": "Strengthens the muscles opposing the sustained finger-flexor grip used on the machine.",
+          "camera_focus": "hand",
+          "hand_fatigue": false
+        },
+        {
+          "id": "tendon-glide-sequence",
+          "manual_ref": "9.2",
+          "exercise_name": "Controlled Tendon-Glide Sequence",
+          "type": "mobility",
+          "equipment": [],
+          "setup": "Wrist neutral, hand open.",
+          "primary_muscles": ["Finger_Flexors"],
+          "secondary_muscles": ["Intrinsic_Hand", "Finger_Extensors"],
+          "cues": [
+            "Move slowly through open hand, hook fist, full fist, tabletop, and straight fist positions.",
+            "Keep the wrist neutral and use only a comfortable range.",
+            "Do not force a painful finger, compress swollen joints, or perform aggressively during acute nerve symptoms."
+          ],
+          "tempo": "2-3 seconds per position",
+          "dose": "3-5 controlled cycles",
+          "best_use": ["session_reset", "post_work"],
+          "regression": "Use fewer positions.",
+          "progression": "Increase control and pause time, not force.",
+          "the_why": "Maintains varied finger motion after long periods of static gripping.",
+          "camera_focus": "hand",
+          "hand_fatigue": false
+        },
+        {
+          "id": "eccentric-wrist-extension",
+          "manual_ref": "9.3",
+          "exercise_name": "Eccentric Dumbbell Wrist Extension",
+          "type": "strength",
+          "equipment": ["Light dumbbell", "Table or thigh support"],
+          "setup": "Forearm supported on the thigh or table, palm facing down.",
+          "primary_muscles": ["Wrist_Extensors"],
+          "secondary_muscles": ["Finger_Extensors", "Brachioradialis"],
+          "cues": [
+            "Support the forearm on the thigh or table with the palm facing down.",
+            "Use the other hand to help lift the dumbbell, then lower slowly with the working wrist.",
+            "Keep the forearm still and avoid excessive grip pressure."
+          ],
+          "tempo": "Assisted lift; 4-5 seconds lowering",
+          "dose": "2-3 sets of 10-15 per side",
+          "best_use": ["post_work", "recovery"],
+          "regression": "Use no weight or a shorter lever.",
+          "progression": "Increase the dumbbell by the smallest available amount.",
+          "the_why": "Develops wrist-extensor tendon capacity and balances repetitive flexor-dominant gripping.",
+          "camera_focus": "forearm",
+          "hand_fatigue": true
+        },
+        {
+          "id": "eccentric-wrist-flexion",
+          "manual_ref": "9.4",
+          "exercise_name": "Eccentric Dumbbell Wrist Flexion",
+          "type": "strength",
+          "equipment": ["Light dumbbell", "Table or thigh support"],
+          "setup": "Forearm supported palm upward, wrist just beyond the support edge.",
+          "primary_muscles": ["Wrist_Flexors"],
+          "secondary_muscles": ["Finger_Flexors", "Brachioradialis"],
+          "cues": [
+            "Support the forearm with the palm upward and wrist just beyond the support edge.",
+            "Use the other hand to assist the lift, then lower the weight slowly.",
+            "Do not curl the fingers hard around the handle or move the elbow."
+          ],
+          "tempo": "Assisted lift; 4-5 seconds lowering",
+          "dose": "2 sets of 10-15 per side",
+          "best_use": ["post_work", "recovery"],
+          "regression": "Use an empty hand and resist lightly with the opposite hand.",
+          "progression": "Increase load slowly or add one set only if recovery is good.",
+          "the_why": "Builds controlled tissue capacity for the wrist-flexor system without requiring maximal grip.",
+          "camera_focus": "forearm",
+          "hand_fatigue": true
+        },
+        {
+          "id": "dumbbell-pronation-supination",
+          "manual_ref": "9.5",
+          "exercise_name": "Dumbbell Pronation and Supination",
+          "type": "strength",
+          "equipment": ["Very light dumbbell"],
+          "setup": "Elbow supported around 90 degrees, holding one end of a light dumbbell.",
+          "primary_muscles": ["Pronator_Teres", "Pronator_Quadratus", "Supinator"],
+          "secondary_muscles": ["Biceps_Brachii", "Wrist_Flexors", "Wrist_Extensors"],
+          "cues": [
+            "Hold one end of a very light dumbbell with the elbow supported around 90 degrees.",
+            "Rotate the palm upward and downward while the upper arm remains still.",
+            "Shorten the lever if the wrist bends or the elbow shifts."
+          ],
+          "tempo": "3 seconds each direction; 1-second pause at the controlled endpoint",
+          "dose": "2 sets of 8-12 each direction",
+          "best_use": ["post_work", "strength"],
+          "regression": "Hold closer to the center of the dumbbell.",
+          "progression": "Hold farther from the center or add a small amount of weight.",
+          "the_why": "Builds rotational control for repositioning the machine while preserving wrist alignment.",
+          "camera_focus": "forearm",
+          "hand_fatigue": true
+        },
+        {
+          "id": "radial-ulnar-deviation-control",
+          "manual_ref": "9.6",
+          "exercise_name": "Radial and Ulnar Deviation Control",
+          "type": "strength",
+          "equipment": ["Very light dumbbell or hammer"],
+          "setup": "Forearm supported, thumb pointing upward.",
+          "primary_muscles": ["Radial_Deviators", "Ulnar_Deviators"],
+          "secondary_muscles": ["Finger_Flexors", "Pronator_Teres", "Supinator"],
+          "cues": [
+            "Support the forearm with the thumb pointing upward and hold a very light dumbbell or hammer near the center.",
+            "Move the wrist slowly side to side through a small controlled range.",
+            "Do not rotate the forearm or use momentum."
+          ],
+          "tempo": "3 seconds each direction; no bounce",
+          "dose": "2 sets of 10-15 per side",
+          "best_use": ["post_work", "strength"],
+          "regression": "Use no weight.",
+          "progression": "Lengthen the lever before adding substantial weight.",
+          "the_why": "Builds side-to-side wrist control used when changing machine angle around curved body regions.",
+          "camera_focus": "forearm",
+          "hand_fatigue": true
+        },
+        {
+          "id": "neutral-wrist-dumbbell-hold",
+          "manual_ref": "9.7",
+          "exercise_name": "Neutral-Wrist Dumbbell Hold",
+          "type": "strength",
+          "equipment": ["Light dumbbell"],
+          "setup": "Stand holding a light dumbbell at the side.",
+          "primary_muscles": ["Wrist_Flexors", "Wrist_Extensors"],
+          "secondary_muscles": ["Finger_Flexors", "Lateral_Deltoid", "Transverse_Abdominis"],
+          "cues": [
+            "Hold a light dumbbell at the side with the wrist in line with the forearm.",
+            "Use only enough grip pressure to prevent slipping.",
+            "Do not bend the wrist, shrug, or lean toward the weight."
+          ],
+          "tempo": "20-40 second isometric hold",
+          "dose": "2-3 holds per side",
+          "best_use": ["post_work", "recovery"],
+          "regression": "Use a lighter object or shorter hold.",
+          "progression": "Increase hold time before increasing load.",
+          "the_why": "Develops sustained neutral-wrist capacity without large amounts of repetitive gripping.",
+          "camera_focus": "forearm",
+          "hand_fatigue": true
+        }
+      ]
+    }
+  ],
+
+  "program": {
+    "name": "Twelve-Week Foundational Program",
+    "note": "Artists with demanding appointment calendars may use two strength days instead of three. General physical-activity guidance recommends muscle-strengthening work on at least two days per week; this protocol uses two to three low-load sessions to build occupational capacity without heavy lifting.",
+    "refs": [11],
+    "weekly_template": [
+      { "day": "Monday", "plan": "Strength Session A", "emphasis": "Upper back, rotator cuff, core, hips, calves, finger extensors" },
+      { "day": "Tuesday", "plan": "Workday routine only", "emphasis": "Pre-session routine plus movement resets" },
+      { "day": "Wednesday", "plan": "Strength Session B", "emphasis": "Serratus, neck, trunk control, single-leg strength, wrists" },
+      { "day": "Thursday", "plan": "Recovery", "emphasis": "Walk, mobility, light session resets" },
+      { "day": "Friday", "plan": "Strength Session C or abbreviated session", "emphasis": "Full-body endurance; omit if tattoo workload is high" },
+      { "day": "Saturday", "plan": "Workday routine only", "emphasis": "Protect precision; no hand-fatigue work before appointments" },
+      { "day": "Sunday", "plan": "Recovery and audit", "emphasis": "Walk, mobility, workstation and symptom review" }
+    ],
+    "phases": [
+      {
+        "id": "phase-1",
+        "name": "Phase 1 — Movement quality",
+        "weeks": [1, 4],
+        "rules": [
+          "Two strength sessions per week; optional third abbreviated session.",
+          "Two sets for most exercises.",
+          "Use the lowest effective resistance.",
+          "Stop with at least four repetitions in reserve.",
+          "Focus on setup speed, breathing, alignment, and a predictable next-day response."
+        ],
+        "sessions": [
+          {
+            "id": "phase-1-a",
+            "label": "Session A",
+            "items": [
+              { "exercise_id": "band-external-rotation", "prescription": "2 x 12-15" },
+              { "exercise_id": "supported-one-arm-row", "prescription": "2 x 10-12" },
+              { "exercise_id": "dead-bug-full-exhale", "prescription": "2 x 6 per side" },
+              { "exercise_id": "banded-glute-bridge", "prescription": "2 x 12" },
+              { "exercise_id": "supported-split-squat", "prescription": "2 x 8 per side" },
+              { "exercise_id": "straight-knee-calf-raise", "prescription": "2 x 15" },
+              { "exercise_id": "finger-extension-band-opens", "prescription": "2 x 15" }
+            ]
+          },
+          {
+            "id": "phase-1-b",
+            "label": "Session B",
+            "items": [
+              { "exercise_id": "serratus-wall-slide", "prescription": "2 x 8" },
+              { "exercise_id": "deep-neck-flexor-chin-nod", "prescription": "5 x 5 seconds" },
+              { "exercise_id": "bird-dog", "prescription": "2 x 6 per side" },
+              { "exercise_id": "banded-lateral-walk", "prescription": "2 x 8 steps each direction" },
+              { "exercise_id": "controlled-sit-to-stand", "prescription": "2 x 10" },
+              { "exercise_id": "bent-knee-soleus-raise", "prescription": "2 x 15" },
+              { "exercise_id": "dumbbell-pronation-supination", "prescription": "2 x 8 each direction" }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "phase-2",
+        "name": "Phase 2 — Capacity",
+        "weeks": [5, 8],
+        "rules": [
+          "Two or three strength sessions per week.",
+          "Progress to three sets on primary exercises.",
+          "Reach the upper repetition range before increasing resistance.",
+          "Maintain two to three repetitions in reserve.",
+          "Add the side plank, Pallof press, step-down, and eccentric wrist work."
+        ],
+        "sessions": [
+          {
+            "id": "phase-2-a",
+            "label": "Session A",
+            "items": [
+              { "exercise_id": "band-external-rotation", "prescription": "3 x 15" },
+              { "exercise_id": "supported-one-arm-row", "prescription": "3 x 12" },
+              { "exercise_id": "dead-bug-full-exhale", "prescription": "3 x 8 per side" },
+              { "exercise_id": "half-kneeling-pallof-press", "prescription": "3 x 10 per side" },
+              { "exercise_id": "banded-lateral-walk", "prescription": "3 x 10 steps each direction" },
+              { "exercise_id": "banded-spanish-squat-isometric", "prescription": "4 x 25-35 seconds" },
+              { "exercise_id": "straight-knee-calf-raise", "prescription": "3 x 15-20" },
+              { "exercise_id": "finger-extension-band-opens", "prescription": "2 x 20" }
+            ]
+          },
+          {
+            "id": "phase-2-b",
+            "label": "Session B",
+            "items": [
+              { "exercise_id": "serratus-wall-slide", "prescription": "3 x 10" },
+              { "exercise_id": "face-pull-external-rotation", "prescription": "3 x 12" },
+              { "exercise_id": "deep-neck-flexor-chin-nod", "prescription": "6 x 8 seconds" },
+              { "exercise_id": "bird-dog", "prescription": "3 x 8 per side" },
+              { "exercise_id": "side-plank", "prescription": "3 x 20-30 seconds per side" },
+              { "exercise_id": "banded-glute-bridge", "prescription": "3 x 12-15" },
+              { "exercise_id": "controlled-step-down", "prescription": "3 x 8 per side" },
+              { "exercise_id": "eccentric-wrist-extension", "prescription": "2 x 12 per side" }
+            ]
+          },
+          {
+            "id": "phase-2-c",
+            "label": "Session C (optional)",
+            "optional": true,
+            "items": [
+              { "exercise_id": "incline-push-up-plus", "prescription": "2 x 10-12" },
+              { "exercise_id": "supported-single-leg-rdl", "prescription": "2 x 8 per side" },
+              { "exercise_id": "bent-knee-soleus-raise", "prescription": "3 x 18-25" },
+              { "exercise_id": "wall-tibialis-raise", "prescription": "2 x 20" },
+              { "exercise_id": "dumbbell-pronation-supination", "prescription": "2 x 10 each direction" },
+              { "exercise_id": "neutral-wrist-dumbbell-hold", "prescription": "2 x 25-30 seconds per side" }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "phase-3",
+        "name": "Phase 3 — Occupational endurance",
+        "weeks": [9, 12],
+        "inherits_sessions_from": "phase-2",
+        "inherit_note": "The manual specifies rules for Phase 3 but does not restate session contents. Sessions are inherited from Phase 2 and modified by the rules below. Do not invent Phase 3 prescriptions.",
+        "rules": [
+          "Keep two primary sessions and one optional shorter session.",
+          "Use the prescribed slow eccentrics and longer isometric holds.",
+          "Progress unilateral control before chasing heavier dumbbells.",
+          "Add a fourth set only to one or two regions that fatigue first during work.",
+          "Do not increase training volume during the same week that appointment volume increases sharply."
+        ],
+        "sessions": []
+      }
+    ],
+    "maintenance": {
+      "name": "Maintenance after Week 12",
+      "rules": [
+        "Two full-body sessions each week.",
+        "One abbreviated 15-minute session targeting the artist's first-fatiguing regions.",
+        "Eight-minute pre-session routine on long tattoo days.",
+        "Movement reset at natural stopping points or approximately hourly.",
+        "Monthly workstation audit and exercise progression review."
+      ]
+    },
+    "minimum_effective_session": {
+      "name": "Fifteen-minute minimum-effective session",
+      "duration_min": 15,
+      "items": [
+        { "exercise_id": "supported-one-arm-row", "prescription": "2 sets of 12" },
+        { "exercise_id": "band-external-rotation", "prescription": "2 sets of 15" },
+        { "exercise_id": "dead-bug-full-exhale", "prescription": "2 sets", "alternatives": ["half-kneeling-pallof-press"] },
+        { "exercise_id": "banded-lateral-walk", "prescription": "2 sets of 10 steps each direction" },
+        { "exercise_id": "supported-split-squat", "prescription": "2 sets of 10", "alternatives": ["controlled-sit-to-stand"] },
+        { "exercise_id": "straight-knee-calf-raise", "prescription": "2 sets of 15-20" },
+        { "exercise_id": "finger-extension-band-opens", "prescription": "1-2 sets of 20" }
+      ]
+    },
+    "reduce_volume_when": [
+      "Soreness changes machine control or drawing precision.",
+      "Forearm fatigue remains elevated the next workday.",
+      "Exercise symptoms increase during every subsequent tattoo session.",
+      "Soreness lasts more than approximately 48 hours.",
+      "Technique deteriorates before reaching the minimum target repetitions.",
+      "A high-volume tattoo week, convention, travel schedule, or poor sleep significantly reduces recovery."
+    ]
+  },
+
+  "symptom_modifications": [
+    {
+      "id": "neck-upper-trap-fatigue",
+      "symptom": "Neck or upper-trapezius fatigue",
+      "region_id": "shoulders-neck-scapular",
+      "workstation": "Raise and rotate the client; move the light; support the forearms; reduce prolonged chin-down viewing.",
+      "emphasize": ["deep-neck-flexor-chin-nod", "supported-one-arm-row", "serratus-wall-slide"],
+      "emphasize_note": "Plus frequent position changes.",
+      "reduce": ["face-pull-external-rotation"],
+      "reduce_note": "Temporarily reduce long face-pull holds if they increase neck tension."
+    },
+    {
+      "id": "interscapular-pain",
+      "symptom": "Pain between the shoulder blades",
+      "region_id": "shoulders-neck-scapular",
+      "workstation": "Shorten static reaches; use chest or forearm support where practical; alternate approach angles.",
+      "emphasize": ["thoracic-extension-over-chair", "supported-one-arm-row", "serratus-wall-slide", "breathing-90-90"],
+      "emphasize_note": "Rather than forcefully squeezing the shoulder blades together all day.",
+      "reduce": [],
+      "reduce_note": null
+    },
+    {
+      "id": "low-back-stiffness",
+      "symptom": "Low-back stiffness",
+      "region_id": "spine-deep-core",
+      "workstation": "Raise the work; face the client; use hip hinges and supported split stances.",
+      "emphasize": ["dead-bug-full-exhale", "bird-dog", "half-kneeling-pallof-press", "banded-glute-bridge"],
+      "emphasize_note": "Plus walking.",
+      "reduce": ["supported-single-leg-rdl"],
+      "reduce_note": "Reduce unsupported bent-over exercise positions."
+    },
+    {
+      "id": "anterior-knee-discomfort",
+      "symptom": "Front-of-knee discomfort",
+      "region_id": "knees-ankles",
+      "workstation": "Increase stool height, avoid deep sustained crouching, and use a footrest.",
+      "emphasize": ["controlled-sit-to-stand", "banded-spanish-squat-isometric", "banded-lateral-walk", "straight-knee-calf-raise"],
+      "emphasize_note": "Within a tolerable range.",
+      "reduce": ["controlled-step-down"],
+      "reduce_note": "Reduce step height if step-downs provoke symptoms."
+    },
+    {
+      "id": "forearm-elbow-aching",
+      "symptom": "Forearm or elbow aching",
+      "region_id": "hands-wrists-forearms",
+      "workstation": "Reduce grip pressure, support the forearm, check cable pull, and avoid stacking drawing plus wrist training before a long tattoo.",
+      "emphasize": ["eccentric-wrist-extension"],
+      "emphasize_note": "Light eccentric work after work only; reduce volume if next-day precision declines.",
+      "reduce": [],
+      "reduce_note": null
+    },
+    {
+      "id": "hand-tingling-numbness",
+      "symptom": "Hand tingling or numbness",
+      "region_id": "hands-wrists-forearms",
+      "severity": "referral",
+      "workstation": "Recheck wrist position and external compression.",
+      "emphasize": [],
+      "emphasize_note": "Stop provocative exercise and avoid aggressive stretching. Persistent, recurrent, or progressive symptoms require clinical evaluation.",
+      "reduce": ["eccentric-wrist-extension", "eccentric-wrist-flexion", "neutral-wrist-dumbbell-hold", "radial-ulnar-deviation-control", "dumbbell-pronation-supination"],
+      "reduce_note": "Stop provocative exercise."
+    },
+    {
+      "id": "leg-foot-fatigue",
+      "symptom": "Leg or foot fatigue",
+      "region_id": "knees-ankles",
+      "workstation": "Use full foot support, alternate sitting and standing, walk during breaks. Avoid tucking one foot under the stool for long periods.",
+      "emphasize": ["straight-knee-calf-raise", "bent-knee-soleus-raise"],
+      "emphasize_note": null,
+      "reduce": [],
+      "reduce_note": null
+    },
+    {
+      "id": "eye-strain-headaches",
+      "symptom": "Eye strain and headaches",
+      "region_id": null,
+      "workstation": "Improve task lighting, reduce glare, correct viewing distance, use appropriate lenses, and look at a distant object during breaks.",
+      "emphasize": [],
+      "emphasize_note": "Headache with neurological or visual changes requires medical evaluation.",
+      "reduce": [],
+      "reduce_note": null
+    }
+  ],
+
+  "checklists": [
+    {
+      "id": "daily-opening",
+      "name": "Daily opening checklist",
+      "cadence": "daily",
+      "items": [
+        "Completed the pre-session routine.",
+        "Client support can be adjusted for the planned body region.",
+        "Artist stool height and foot support are set.",
+        "Light provides a clear view without leaning closer.",
+        "Tray and controls are within easy reach.",
+        "At least one movement-break point is planned.",
+        "Hand and wrist feel normal before precision work."
+      ]
+    },
+    {
+      "id": "between-client",
+      "name": "Between-client reset checklist",
+      "cadence": "per-client",
+      "items": [
+        "Walked for at least one minute.",
+        "Opened the hands and released grip tension.",
+        "Changed neck, trunk, and hip position.",
+        "Checked whether one shoulder or hip was carrying more load.",
+        "Repositioned stool, tray, light, and supports for the next client.",
+        "Ate, drank, and used the restroom as needed."
+      ]
+    },
+    {
+      "id": "monthly-workstation-audit",
+      "name": "Monthly workstation audit",
+      "cadence": "monthly",
+      "items": [
+        "Client table/chair adjusts through all common body regions.",
+        "Stool is stable, height-adjustable, and allows foot support.",
+        "Arm and leg supports are stable and easy to barrier-protect.",
+        "Task light is bright, movable, and does not create glare.",
+        "Supply placement can change with client position.",
+        "Machine/cable/battery configuration does not pull the wrist.",
+        "At least two working postures are practical for each common tattoo location.",
+        "Breaks are built into booking expectations, not treated as emergencies.",
+        "Exercise volume matches the current tattoo workload.",
+        "Any persistent red-flag symptom has been referred for evaluation."
+      ]
+    },
+    {
+      "id": "four-week-review",
+      "name": "Four-week review questions",
+      "cadence": "four-weekly",
+      "type": "questions",
+      "items": [
+        "Which body region fatigues first during tattooing?",
+        "Which client location creates the worst posture?",
+        "Which workstation change produced the largest improvement?",
+        "Which exercise improved control or endurance most clearly?",
+        "Did any exercise reduce next-day precision or increase symptoms?",
+        "Can any frequently used item be moved closer?",
+        "Can another supported working position be created?",
+        "What single training variable should progress during the next four weeks?"
+      ]
+    }
+  ],
+
+  "log_schema": {
+    "id": "weekly-symptom-exposure-log",
+    "name": "Weekly symptom and exposure log",
+    "cadence": "daily entry, weekly review",
+    "fields": [
+      { "key": "day", "label": "Day", "type": "date" },
+      { "key": "tattoo_hours", "label": "Tattoo hrs", "type": "number", "min": 0, "max": 24 },
+      { "key": "drawing_hours", "label": "Drawing hrs", "type": "number", "min": 0, "max": 24 },
+      { "key": "neck", "label": "Neck", "type": "scale", "min": 0, "max": 10 },
+      { "key": "back", "label": "Back", "type": "scale", "min": 0, "max": 10 },
+      { "key": "hand", "label": "Hand", "type": "scale", "min": 0, "max": 10 },
+      { "key": "breaks_used", "label": "Breaks used", "type": "number", "min": 0 },
+      { "key": "notes", "label": "Notes", "type": "text" }
+    ]
+  },
+
+  "evidence": {
+    "statement": "The exercise selection and weekly structure are an evidence-informed professional synthesis. Tattoo-specific randomized trials of prevention programs are not yet available. The strongest direct occupational evidence describes discomfort and exposure patterns; broader clinical guidelines support the selected categories of strengthening, endurance, movement control, and workload modification.",
+    "notes": [
+      "Direct tattoo-artist evidence supports the identification of affected regions and ergonomic exposures, but it does not establish that any single exercise prevents injury.",
+      "Clinical practice guidelines cited here primarily address people with pain; their exercise categories are used to inform conservative capacity-building, not to diagnose or treat the reader.",
+      "The protocol intentionally prioritizes low-load movements, endurance, positional control, and work-environment changes because these match the occupational demands and equipment constraints.",
+      "Individual anatomy, prior injury, disability, age, health conditions, schedule, and tattoo style may materially change the appropriate plan."
+    ],
+    "references": [
+      { "n": 1, "citation": "Keester DL, Sommerich CM. Investigation of musculoskeletal discomfort, work postures, and muscle activation among practicing tattoo artists. Applied Ergonomics. 2017;58:137-143." },
+      { "n": 2, "citation": "Barden EI, et al. The Occupational Hazards of Tattoo Artists: A Scoping Review. Cureus. 2026." },
+      { "n": 3, "citation": "National Institute for Occupational Safety and Health. Step 1: Identify Risk Factors — Ergonomics." },
+      { "n": 4, "citation": "National Institute for Occupational Safety and Health. Practical Demonstrations of Ergonomic Principles. DHHS (NIOSH) Publication No. 2011-191." },
+      { "n": 5, "citation": "Occupational Safety and Health Administration. Computer Workstations eTool." },
+      { "n": 6, "citation": "Occupational Safety and Health Administration. Computer Workstations: Positions and Neutral Body Positioning." },
+      { "n": 7, "citation": "Blanpied PR, et al. Neck Pain: Revision 2017 Clinical Practice Guidelines. JOSPT. 2017;47(7):A1-A83." },
+      { "n": 8, "citation": "George SZ, et al. Interventions for the Management of Acute and Chronic Low Back Pain: Revision 2021. JOSPT. 2021;51(11):CPG1-CPG60." },
+      { "n": 9, "citation": "Willy RW, et al. Patellofemoral Pain: Clinical Practice Guidelines. JOSPT. 2019;49(9):CPG1-CPG95." },
+      { "n": 10, "citation": "Martin RL, et al. Achilles Pain, Stiffness, and Muscle Power Deficits: Midportion Achilles Tendinopathy. JOSPT. 2018;48(5):A1-A38." },
+      { "n": 11, "citation": "U.S. Department of Health and Human Services. Physical Activity Guidelines for Americans, 2nd edition." },
+      { "n": 12, "citation": "National Institute for Occupational Safety and Health. Ergonomic Guidelines for Manual Material Handling. DHHS (NIOSH) Publication No. 2007-131." }
+    ]
+  }
+}
