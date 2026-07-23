@@ -1,0 +1,70 @@
+name: Apply Tattoo Prehab v5 release
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.v5-release/**'
+      - '.github/workflows/apply-v5-release.yml'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: tattoo-prehab-v5-release
+  cancel-in-progress: false
+
+jobs:
+  apply-release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Use Node 24
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+
+      - name: Reconstruct and apply verified v5 patch
+        shell: bash
+        run: |
+          set -euo pipefail
+          cat .v5-release/patch/* | base64 --decode > /tmp/tattoo-prehab-v5.patch.xz
+          xz --decompress --stdout /tmp/tattoo-prehab-v5.patch.xz > /tmp/tattoo-prehab-v5.patch
+
+          manual='tattoo-artist-longevity-revised-handoff/source/Tattoo_Artist_Physical_Longevity_Manual.pdf'
+          test -f "$manual"
+          cp "$manual" /tmp/Tattoo_Artist_Physical_Longevity_Manual.pdf
+
+          rm -rf tattoo-artist-longevity-revised-handoff
+          rm -f tsconfig.tsbuildinfo
+
+          git apply --check /tmp/tattoo-prehab-v5.patch
+          git apply --whitespace=nowarn /tmp/tattoo-prehab-v5.patch
+
+          mkdir -p docs/reference
+          cp /tmp/Tattoo_Artist_Physical_Longevity_Manual.pdf \
+            docs/reference/Tattoo_Artist_Physical_Longevity_Manual.pdf
+
+          rm -rf .v5-release
+          rm -f .github/workflows/apply-v5-release.yml
+
+          node scripts/verify-protocol.mjs
+          node scripts/verify-v5.mjs
+
+      - name: Commit exact v5 source
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add -A
+          if git diff --cached --quiet; then
+            echo 'No release changes to commit.'
+            exit 0
+          fi
+          git commit -m 'Release Tattoo Prehab v5 merged UX'
+          git push origin HEAD:main
