@@ -224,3 +224,51 @@ a { color: inherit; }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { scroll-behavior: auto !important; animation-duration: .01ms !important; transition-duration: .01ms !important; }
 }
+
+/* ------------------------------------------------------------------ */
+/* Tap-to-explore: muscle panel, region chips, detail sheet            */
+/* ------------------------------------------------------------------ */
+
+.muscle-panel { border: 1px solid var(--line); border-radius: 14px; background: var(--surface); overflow: hidden; }
+.muscle-panel__head { display: flex; align-items: flex-start; justify-content: space-between; gap: 14px; padding: 18px 17px 14px; border-bottom: 1px solid var(--line); }
+.muscle-panel__head h2 { margin: 4px 0 7px; font-size: 26px; letter-spacing: -.04em; }
+.muscle-panel__count { margin: 0; color: var(--muted); font-size: 12px; line-height: 1.5; }
+.muscle-panel__list { display: grid; padding: 7px; }
+.muscle-panel__row { display: grid; grid-template-columns: auto 1fr auto auto; align-items: center; gap: 11px; min-height: 58px; padding: 9px 10px; border: 0; border-radius: 10px; background: transparent; text-align: left; cursor: pointer; transition: background .15s ease; }
+.muscle-panel__row:hover { background: rgba(255,255,255,.04); }
+.muscle-panel__row:active { background: rgba(255,255,255,.07); }
+.muscle-panel__ref { color: var(--dim); font-family: var(--font-mono); font-size: 11px; }
+.muscle-panel__row.is-primary .muscle-panel__ref { color: var(--lime); }
+.muscle-panel__copy { display: grid; gap: 3px; min-width: 0; }
+.muscle-panel__copy strong { font-size: 14px; }
+.muscle-panel__copy small { color: var(--muted); font-size: 11px; }
+.muscle-panel__row.is-primary .muscle-panel__copy small { color: #b9c79a; }
+.muscle-panel__flag { color: var(--orange); }
+.muscle-panel__chevron { color: var(--dim); }
+
+.anatomy-badge { position: absolute; z-index: 3; top: 14px; left: 14px; padding: 8px 13px; border: 1px solid rgba(0,229,255,.35); border-radius: 999px; background: rgba(4,10,20,.88); color: #7fe9ff; font-family: var(--font-mono); font-size: 11px; font-weight: 650; text-transform: uppercase; letter-spacing: .1em; backdrop-filter: blur(10px); box-shadow: 0 0 18px rgba(0,229,255,.18); }
+
+.region-chips { display: flex; gap: 8px; margin-bottom: 12px; padding-bottom: 4px; overflow-x: auto; -webkit-overflow-scrolling: touch; scrollbar-width: none; }
+.region-chips::-webkit-scrollbar { display: none; }
+.region-chips button { display: flex; align-items: center; gap: 7px; flex: 0 0 auto; min-height: 44px; padding: 0 15px; border: 1px solid var(--line); border-radius: 999px; background: var(--surface); color: var(--muted); font-size: 12px; font-weight: 620; white-space: nowrap; cursor: pointer; transition: .15s ease; }
+.region-chips button small { color: var(--region-accent); font-family: var(--font-mono); font-size: 10px; }
+.region-chips button.is-active { border-color: color-mix(in srgb, var(--region-accent) 45%, transparent); background: color-mix(in srgb, var(--region-accent) 9%, var(--surface)); color: var(--text); }
+
+.learn-layout--hero { display: block; min-height: 0; }
+.learn-layout--hero .anatomy-stage { min-height: 62dvh; }
+
+.detail-sheet { position: fixed; z-index: 90; inset-inline: 0; bottom: 0; display: flex; flex-direction: column; max-height: min(58dvh, 640px); margin-inline: auto; width: min(720px, 100%); border: 1px solid var(--line-strong); border-bottom: 0; border-radius: 20px 20px 0 0; background: rgba(13,16,22,.97); backdrop-filter: blur(18px); box-shadow: 0 -24px 70px rgba(0,0,0,.5); transform: translateY(102%); transition: transform 260ms cubic-bezier(.32,.72,0,1); visibility: hidden; }
+.detail-sheet.is-open { transform: translateY(0); visibility: visible; }
+.detail-sheet.is-dragging { transition: none; }
+.detail-sheet__handle { display: grid; place-items: center; flex: 0 0 auto; min-height: 34px; border: 0; background: transparent; cursor: grab; touch-action: none; }
+.detail-sheet__handle:active { cursor: grabbing; }
+.detail-sheet__handle span { width: 44px; height: 5px; border-radius: 999px; background: var(--line-strong); }
+.detail-sheet__body { min-height: 0; padding: 0 12px calc(14px + env(safe-area-inset-bottom)); overflow-y: auto; overscroll-behavior: contain; }
+.detail-sheet__body .exercise-card, .detail-sheet__body .muscle-panel { border: 0; background: transparent; }
+.detail-sheet__body .muscle-panel__head { padding-inline: 5px; }
+.detail-sheet__body .exercise-card__toggle svg { display: none; }
+
+@media (max-width: 900px) {
+  .detail-sheet { bottom: 72px; } /* clear the mobile bottom nav */
+  .learn-layout--hero .anatomy-stage { min-height: 58dvh; }
+}

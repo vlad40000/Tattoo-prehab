@@ -12,6 +12,7 @@ test('learn area exposes all 33 exercises by region', async ({ page }) => {
   await page.goto('/');
   await page.getByRole('button', { name: 'Learn' }).first().click();
   await expect(page.getByText('33 manual-aligned exercises')).toBeVisible();
+  await page.getByRole('button', { name: 'List', exact: true }).click();
   const regionButtons = page.locator('.region-group > button');
   await expect(regionButtons).toHaveCount(5);
   const counts = await page.locator('.region-group > button em').allTextContents();

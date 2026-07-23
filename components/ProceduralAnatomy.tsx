@@ -1,12 +1,19 @@
 'use client';
 
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import * as THREE from 'three';
 import type { ThreeEvent } from '@react-three/fiber';
 import { RIG_GROUP_OFFSET, RIG_PARTS_EXPANDED, type RigPart } from '@/lib/proceduralRig';
 import { activationOf, materialFor } from '@/lib/materials';
+import type { MuscleId } from '@/lib/muscleRegistry';
 import type { MuscleState } from '@/lib/protocol';
 import MuscleTooltip from './MuscleTooltip';
+
+/** Squared pixel distance below which a pointer down→up pair counts as a tap
+ *  rather than an orbit drag. */
+const TAP_SLOP_SQ = 12 * 12;
+
+type TapStart = { x: number; y: number; id: string };
 
 function Geometry({ geom, args }: { geom: RigPart['geom']; args: number[] }) {
   switch (geom) {
@@ -26,11 +33,15 @@ function RigMesh({
   muscleState,
   hoveredId,
   onHover,
+  tapStart,
+  onSelect,
 }: {
   part: RigPart;
   muscleState: MuscleState;
   hoveredId: string | null;
   onHover: (id: string | null) => void;
+  tapStart: React.MutableRefObject<TapStart | null>;
+  onSelect?: (id: MuscleId) => void;
 }) {
   const interactive = part.id !== null;
   const isHovered = interactive && hoveredId === part.id;
@@ -60,6 +71,29 @@ function RigMesh({
         e.stopPropagation();
         onHover(null);
       }}
+      onPointerDown={
+        onSelect
+          ? (e: ThreeEvent<PointerEvent>) => {
+              // Do not stopPropagation: OrbitControls must still receive the
+              // event so a drag that starts on a muscle can orbit the camera.
+              tapStart.current = { x: e.nativeEvent.clientX, y: e.nativeEvent.clientY, id: part.id! };
+            }
+          : undefined
+      }
+      onPointerUp={
+        onSelect
+          ? (e: ThreeEvent<PointerEvent>) => {
+              const start = tapStart.current;
+              tapStart.current = null;
+              if (!start || start.id !== part.id) return;
+              const dx = e.nativeEvent.clientX - start.x;
+              const dy = e.nativeEvent.clientY - start.y;
+              if (dx * dx + dy * dy > TAP_SLOP_SQ) return; // it was an orbit drag
+              e.stopPropagation();
+              onSelect(part.id as MuscleId);
+            }
+          : undefined
+      }
     >
       <Geometry geom={part.geom} args={part.args} />
       <meshStandardMaterial
@@ -80,10 +114,28 @@ function RigMesh({
 /**
  * Zero-asset anatomy rig. Node names match the canonical muscle vocabulary, so
  * every exercise in the data file highlights identically here and on a real
- * .glb model.
+ * .glb model. When `onSelectMuscle` is provided the rig is tappable: a
+ * down→up pair within the tap slop selects the muscle; anything longer is
+ * treated as an orbit gesture and ignored.
  */
-export default function ProceduralAnatomy({ muscleState }: { muscleState: MuscleState }) {
+export default function ProceduralAnatomy({
+  muscleState,
+  onSelectMuscle,
+}: {
+  muscleState: MuscleState;
+  onSelectMuscle?: (id: MuscleId) => void;
+}) {
   const [hoveredId, setHoveredId] = useState<string | null>(null);
+  const tapStart = useRef<TapStart | null>(null);
+
+  // Pointer feedback for mouse / trackpad / Pencil hover.
+  useEffect(() => {
+    if (!onSelectMuscle || typeof document === 'undefined') return;
+    document.body.style.cursor = hoveredId ? 'pointer' : '';
+    return () => {
+      document.body.style.cursor = '';
+    };
+  }, [hoveredId, onSelectMuscle]);
 
   return (
     <group position={RIG_GROUP_OFFSET} onPointerMissed={() => setHoveredId(null)}>
@@ -94,6 +146,8 @@ export default function ProceduralAnatomy({ muscleState }: { muscleState: Muscle
           muscleState={muscleState}
           hoveredId={hoveredId}
           onHover={setHoveredId}
+          tapStart={tapStart}
+          onSelect={onSelectMuscle}
         />
       ))}
     </group>

@@ -2,12 +2,12 @@
 
 import { Component, Suspense, useEffect, useState, type ReactNode } from 'react';
 import { Canvas } from '@react-three/fiber';
-import { Environment, Html, Stars } from '@react-three/drei';
+import { Html, Stars } from '@react-three/drei';
 import AnatomyModel, { ANATOMY_MODEL_PATH } from './AnatomyModel';
 import ProceduralAnatomy from './ProceduralAnatomy';
 import CameraRig from './CameraRig';
 import { verifyDataIntegrity, type MuscleState } from '@/lib/protocol';
-import type { FocusKey } from '@/lib/muscleRegistry';
+import type { FocusKey, MuscleId } from '@/lib/muscleRegistry';
 
 /* ------------------------------------------------------------------ */
 /* Model source resolution                                             */
@@ -78,10 +78,12 @@ function Scene({
   muscleState,
   focus,
   source,
+  onSelectMuscle,
 }: {
   muscleState: MuscleState;
   focus: FocusKey;
   source: ModelSource;
+  onSelectMuscle?: (id: MuscleId) => void;
 }) {
   return (
     <>
@@ -104,13 +106,12 @@ function Scene({
 
       <Suspense fallback={<CanvasLoader />}>
         {source === 'glb' ? (
-          <ModelBoundary fallback={<ProceduralAnatomy muscleState={muscleState} />}>
-            <AnatomyModel muscleState={muscleState} />
+          <ModelBoundary fallback={<ProceduralAnatomy muscleState={muscleState} onSelectMuscle={onSelectMuscle} />}>
+            <AnatomyModel muscleState={muscleState} onSelectMuscle={onSelectMuscle} />
           </ModelBoundary>
         ) : (
-          <ProceduralAnatomy muscleState={muscleState} />
+          <ProceduralAnatomy muscleState={muscleState} onSelectMuscle={onSelectMuscle} />
         )}
-        <Environment preset="night" />
       </Suspense>
 
       <CameraRig focus={focus} />
@@ -124,10 +125,15 @@ export default function AnatomyCanvas({
   muscleState,
   focus,
   contained = false,
+  onSelectMuscle,
 }: {
   muscleState: MuscleState;
   focus: FocusKey;
   contained?: boolean;
+  /** Enables tap-to-explore. Selection stays a visual shortcut: every muscle
+   *  and exercise remains reachable through the text browser, which is why
+   *  the canvas keeps aria-hidden. */
+  onSelectMuscle?: (id: MuscleId) => void;
 }) {
   const source = useModelSource();
 
@@ -151,7 +157,7 @@ export default function AnatomyCanvas({
         shadows={false}
       >
         <Suspense fallback={null}>
-          <Scene muscleState={muscleState} focus={focus} source={source} />
+          <Scene muscleState={muscleState} focus={focus} source={source} onSelectMuscle={onSelectMuscle} />
         </Suspense>
       </Canvas>
       </div>
