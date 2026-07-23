@@ -1372,3 +1372,80 @@ textarea { min-height: 105px; padding: 12px; resize: vertical; }
 .runner-bar { grid-template-columns: 44px 1fr 44px auto; }
 .runner-bar__safety { display: grid; place-items: center; width: 44px; height: 40px; border: 1px solid rgba(255,116,116,.2); border-radius: 11px; background: rgba(255,116,116,.06); color: #ffaaa4; cursor: pointer; }
 .modal-scrim { z-index: 220; }
+
+/* ================================================================== */
+/* v6 accounts, sync, and progression                                 */
+/* ================================================================== */
+.app-top__actions { display: flex; align-items: center; gap: 9px; }
+.account-control { display: grid; place-items: center; width: 38px; height: 38px; }
+.account-control__avatar { width: 34px !important; height: 34px !important; border: 1px solid var(--line-strong); }
+
+.account-sync-card {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 14px;
+  margin: -12px 0 26px;
+  padding: 14px 15px;
+  border: 1px solid rgba(89, 216, 144, 0.22);
+  border-radius: 15px;
+  background: linear-gradient(100deg, rgba(89, 216, 144, 0.09), rgba(89, 216, 144, 0.025));
+}
+.account-sync-card--warning { border-color: rgba(255, 212, 102, 0.24); background: rgba(255, 212, 102, 0.055); }
+.account-sync-card__icon { display: grid; place-items: center; width: 40px; height: 40px; border-radius: 12px; background: rgba(89, 216, 144, 0.1); color: var(--green); }
+.account-sync-card--warning .account-sync-card__icon { background: rgba(255, 212, 102, 0.09); color: var(--yellow); }
+.account-sync-card__copy { min-width: 0; }
+.account-sync-card strong { display: block; font-size: 14px; }
+.account-sync-card p { margin: 4px 0 0; color: var(--muted); font-size: 12px; line-height: 1.5; }
+.account-sync-card small { display: block; margin-top: 7px; color: var(--green); font-size: 11px; }
+.account-sync-card__actions { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 8px; }
+.account-sync-card__actions .secondary-action { min-height: 40px; text-decoration: none; white-space: nowrap; }
+
+.section-heading__actions { display: flex; align-items: center; flex-wrap: wrap; justify-content: flex-end; gap: 10px; }
+.text-button { display: inline-flex; align-items: center; gap: 6px; min-height: 36px; padding: 0; border: 0; background: transparent; color: var(--blue); font-size: 12px; font-weight: 650; cursor: pointer; }
+.metric-grid--four { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+
+.page--progress { max-width: 1180px; }
+.progress-header .text-button { margin-bottom: 12px; }
+.progress-metrics { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; margin-bottom: 18px; }
+.progress-metric { display: grid; grid-template-columns: auto 1fr; align-items: center; gap: 3px 10px; min-height: 112px; padding: 17px; border: 1px solid var(--line); border-radius: 15px; background: var(--surface); }
+.progress-metric > span { grid-row: 1 / 3; display: grid; place-items: center; width: 38px; height: 38px; border-radius: 11px; background: rgba(184, 255, 98, 0.08); color: var(--lime); }
+.progress-metric strong { font-family: var(--font-mono); font-size: 27px; font-weight: 570; line-height: 1; }
+.progress-metric small { color: var(--muted); font-size: 11px; }
+.progress-layout { display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(330px, .9fr); gap: 14px; }
+.progress-panel { min-width: 0; padding: 20px; border: 1px solid var(--line); border-radius: 18px; background: var(--surface); }
+.exercise-progress-list, .history-list { display: grid; margin-top: 16px; }
+.exercise-progress-row { display: grid; grid-template-columns: minmax(0, 1fr) 120px auto; align-items: center; gap: 14px; min-height: 68px; padding: 11px 0; border-top: 1px solid var(--line); }
+.exercise-progress-row:first-child, .history-row:first-child { border-top: 0; }
+.exercise-progress-row > div:first-child { display: grid; gap: 4px; min-width: 0; }
+.exercise-progress-row strong, .history-row strong { font-size: 13px; }
+.exercise-progress-row small, .history-row small { color: var(--muted); font-size: 10.5px; line-height: 1.4; }
+.exercise-progress-row__meter { height: 7px; border-radius: 999px; background: var(--surface-3); overflow: hidden; }
+.exercise-progress-row__meter span { display: block; height: 100%; border-radius: inherit; background: linear-gradient(90deg, var(--blue), var(--lime)); }
+.exercise-progress-row em { color: var(--dim); font-family: var(--font-mono); font-size: 10px; font-style: normal; white-space: nowrap; }
+.history-row { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; align-items: center; gap: 11px; min-height: 62px; border-top: 1px solid var(--line); }
+.history-row > div { display: grid; gap: 4px; min-width: 0; }
+.history-row > span:last-child { color: var(--dim); font-family: var(--font-mono); font-size: 10px; }
+
+.auth-shell { min-height: 100dvh; display: grid; place-items: center; padding: 28px 18px; background: radial-gradient(circle at 50% 0%, rgba(184,255,98,.07), transparent 30rem), var(--bg); }
+.auth-setup-card { width: min(520px, 100%); padding: 30px; border: 1px solid var(--line); border-radius: 20px; background: var(--surface); box-shadow: var(--shadow); }
+.auth-setup-card > span { display: grid; place-items: center; width: 52px; height: 52px; margin-bottom: 20px; border-radius: 15px; background: rgba(184,255,98,.1); color: var(--lime); }
+.auth-setup-card h1 { margin: 6px 0 12px; font-size: clamp(30px, 5vw, 44px); letter-spacing: -.045em; line-height: 1; }
+.auth-setup-card > p:not(.kicker) { margin: 0 0 22px; color: var(--muted); line-height: 1.6; }
+.auth-setup-card .primary-action { text-decoration: none; }
+
+@media (max-width: 900px) {
+  .account-sync-card { grid-template-columns: auto minmax(0, 1fr); }
+  .account-sync-card__actions { grid-column: 1 / -1; justify-content: flex-start; padding-left: 54px; }
+  .progress-layout { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 680px) {
+  .account-sync-card { grid-template-columns: 1fr; margin-top: -6px; }
+  .account-sync-card__actions { grid-column: 1; padding-left: 0; }
+  .account-sync-card__actions > * { flex: 1 1 100%; }
+  .metric-grid--four, .progress-metrics { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .exercise-progress-row { grid-template-columns: minmax(0, 1fr) auto; }
+  .exercise-progress-row__meter { grid-column: 1 / -1; }
+  .app-top__actions { gap: 6px; }
+}

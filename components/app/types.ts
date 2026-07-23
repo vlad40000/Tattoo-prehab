@@ -1,6 +1,6 @@
 import type { RoutineItem } from '@/lib/protocol';
 
-export type AppView = 'today' | 'train' | 'prepare' | 'reset' | 'recover' | 'strength' | 'workstation' | 'symptoms' | 'learn';
+export type AppView = 'today' | 'train' | 'prepare' | 'reset' | 'recover' | 'strength' | 'workstation' | 'symptoms' | 'learn' | 'progress';
 
 export type SessionDefinition = {
   sourceType: 'routine' | 'strength' | 'minimum';

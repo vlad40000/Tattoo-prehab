@@ -1,6 +1,6 @@
 {
   "name": "tattoo-prehab",
-  "version": "5.0.0",
+  "version": "6.0.0",
   "private": true,
   "engines": {
     "node": ">=24 <25"
@@ -15,14 +15,15 @@
     "test:watch": "vitest",
     "test:e2e": "playwright test",
     "verify": "node scripts/verify-protocol.mjs",
-    "verify:ci": "npm run verify && npm run verify:v5 && npm run test && npm run typecheck && npm run lint",
+    "verify:ci": "npm run verify && npm run verify:v5 && npm run verify:accounts && npm run test && npm run typecheck && npm run lint",
     "verify:all": "npm run build && npm run test:e2e",
     "check": "npm run verify:ci",
     "db:generate": "drizzle-kit generate",
     "db:check": "dotenv -e .env.local -- node scripts/check-database.mjs",
     "db:migrate": "dotenv -e .env.local -- node scripts/migrate-database.mjs",
     "db:studio": "dotenv -e .env.local -- node scripts/run-db-studio.mjs",
-    "verify:v5": "node scripts/verify-v5.mjs"
+    "verify:v5": "node scripts/verify-v5.mjs",
+    "verify:accounts": "node scripts/verify-accounts.mjs"
   },
   "dependencies": {
     "@neondatabase/serverless": "^1.0.2",
@@ -35,7 +36,8 @@
     "react": "^19.2.4",
     "react-dom": "^19.2.4",
     "three": "^0.180.0",
-    "zod": "^4.1.13"
+    "zod": "^4.1.13",
+    "@clerk/nextjs": "^7.0.0"
   },
   "devDependencies": {
     "@playwright/test": "^1.57.0",

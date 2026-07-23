@@ -1,20 +1,43 @@
 import { sql } from 'drizzle-orm';
-import { boolean, check, index, integer, jsonb, pgEnum, pgTable, text, timestamp, uniqueIndex, uuid } from 'drizzle-orm/pg-core';
+import {
+  boolean,
+  check,
+  index,
+  integer,
+  jsonb,
+  pgEnum,
+  pgTable,
+  text,
+  timestamp,
+  uniqueIndex,
+  uuid,
+} from 'drizzle-orm/pg-core';
 
 export type SessionItemResult = {
   exerciseId: string;
   prescription: string;
   completed: boolean;
+  plannedSets?: number;
+  completedSets?: number;
+  targetLabel?: string;
 };
 
 export const trafficLight = pgEnum('traffic_light', ['green', 'yellow', 'red']);
 export const sessionSource = pgEnum('session_source', ['routine', 'strength', 'minimum']);
 
-export const participants = pgTable('participants', {
-  id: uuid('id').primaryKey(),
-  createdAt: timestamp('created_at', { withTimezone: true }).defaultNow().notNull(),
-  lastSeenAt: timestamp('last_seen_at', { withTimezone: true }).defaultNow().notNull(),
-});
+export const participants = pgTable(
+  'participants',
+  {
+    id: uuid('id').primaryKey(),
+    clerkUserId: text('clerk_user_id'),
+    claimedAt: timestamp('claimed_at', { withTimezone: true }),
+    createdAt: timestamp('created_at', { withTimezone: true }).defaultNow().notNull(),
+    lastSeenAt: timestamp('last_seen_at', { withTimezone: true }).defaultNow().notNull(),
+  },
+  (table) => [
+    uniqueIndex('participants_clerk_user_uidx').on(table.clerkUserId),
+  ],
+);
 
 export const practiceSessions = pgTable(
   'practice_sessions',
@@ -80,3 +103,23 @@ export const participantPreferences = pgTable('participant_preferences', {
     .$onUpdate(() => new Date())
     .notNull(),
 });
+
+export const accountImports = pgTable(
+  'account_imports',
+  {
+    id: uuid('id').defaultRandom().primaryKey(),
+    participantId: uuid('participant_id')
+      .references(() => participants.id, { onDelete: 'cascade' })
+      .notNull(),
+    importKey: text('import_key').notNull(),
+    sessionsImported: integer('sessions_imported').default(0).notNull(),
+    checkinsImported: integer('checkins_imported').default(0).notNull(),
+    importedAt: timestamp('imported_at', { withTimezone: true }).defaultNow().notNull(),
+  },
+  (table) => [
+    uniqueIndex('account_imports_participant_key_uidx').on(table.participantId, table.importKey),
+    index('account_imports_participant_imported_idx').on(table.participantId, table.importedAt),
+    check('account_imports_session_count_bounds', sql`${table.sessionsImported} between 0 and 200`),
+    check('account_imports_checkin_count_bounds', sql`${table.checkinsImported} between 0 and 200`),
+  ],
+);

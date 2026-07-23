@@ -5,11 +5,12 @@
 1. Create an empty private GitHub repository.
 2. Push this verified source to `main`.
 3. Import that repository from Vercel's New Project flow.
-4. Provision Neon through the Vercel Marketplace for the project.
-5. Add `SESSION_SECRET` and `NEXT_PUBLIC_APP_URL` to Production, Preview, and Development with appropriate values.
-6. Pull development variables locally with `vercel env pull .env.local --yes`.
-7. Run the initial migration against the intended Neon branch.
-8. Deploy a preview, execute browser acceptance checks, then promote the exact verified deployment.
+4. Provision Clerk through the Vercel Marketplace and configure email/password plus Google sign-in in the Clerk Dashboard.
+5. Provision Neon through the Vercel Marketplace for the project.
+6. Add `SESSION_SECRET`, Clerk routing variables, and `NEXT_PUBLIC_APP_URL` to Production, Preview, and Development.
+7. Pull development variables locally with `vercel env pull .env.local --yes`.
+8. Generate/review migrations, then run them against the intended Neon branch.
+9. Deploy a preview, execute account-isolation and browser acceptance checks, then promote the exact verified deployment.
 
 Do not connect Preview deployments to the Production database. Use a Neon development/preview branch.
 
@@ -17,9 +18,11 @@ Do not connect Preview deployments to the Production database. Use a Neon develo
 
 | Variable | Exposure | Purpose |
 | --- | --- | --- |
+| `NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY` | Public | Clerk frontend instance key |
+| `CLERK_SECRET_KEY` | Server only | Clerk backend authentication key |
 | `DATABASE_URL` | Server only | Neon pooled runtime connection string |
 | `DATABASE_URL_UNPOOLED` | Server only | Direct Neon connection preferred for migrations and schema tools |
-| `SESSION_SECRET` | Server only | Signs anonymous participant cookies; at least 32 characters |
+| `SESSION_SECRET` | Server only | Signs anonymous participant cookies and derives opaque account scope keys; at least 32 characters |
 | `NEXT_PUBLIC_APP_URL` | Public | Canonical URL used in application metadata |
 
 ## Migration sequence
@@ -49,7 +52,11 @@ Run additive/backward-compatible migrations before promoting code that requires 
 
 - GitHub Actions is green.
 - Vercel preview build is green.
-- `npm run db:check` confirms all four required tables.
+- `npm run db:check` confirms all five required tables and the account identity migration.
+- Clerk sign-up, sign-in, sign-out, password recovery, and Google login are enabled in the target instance.
+- Two test accounts cannot read, display, import, or synchronize each other's records.
+- A shared-iPad test confirms account-local queues remain isolated.
+- Device-history import is explicit, idempotent, and leaves local records intact on failure.
 - `/api/health` reports `persistence: ready` in the target environment; `configured` is not accepted because it does not prove connectivity or schema readiness.
 - Neon migrations match the checked-in journal.
 - The five primary tabs—Today, Train, Learn, Station, and Symptoms—pass at 1024×1366 and 1366×1024.

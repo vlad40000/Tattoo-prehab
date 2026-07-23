@@ -1,6 +1,8 @@
 import type { Metadata, Viewport } from 'next';
+import { ClerkProvider } from '@clerk/nextjs';
 import { GeistMono } from 'geist/font/mono';
 import { GeistSans } from 'geist/font/sans';
+import { isClerkConfigured } from '@/lib/auth/config';
 import './globals.css';
 
 export const metadata: Metadata = {
@@ -21,14 +23,23 @@ export const viewport: Viewport = {
   themeColor: '#0a0b10',
   width: 'device-width',
   initialScale: 1,
-  // No maximumScale / user-scalable lock: pinch-zoom is a WCAG 1.4.4
-  // requirement and this app is read at arm's length on a shop iPad.
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
-  return (
+  const document = (
     <html lang="en" className={`${GeistSans.variable} ${GeistMono.variable}`}>
       <body>{children}</body>
     </html>
   );
+
+  return isClerkConfigured() ? (
+    <ClerkProvider
+      signInUrl="/sign-in"
+      signUpUrl="/sign-up"
+      signInFallbackRedirectUrl="/"
+      signUpFallbackRedirectUrl="/"
+    >
+      {document}
+    </ClerkProvider>
+  ) : document;
 }

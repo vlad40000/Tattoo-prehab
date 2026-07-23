@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useState } from 'react';
 import { Check, PauseCircle, Play, RotateCcw, Trash2 } from 'lucide-react';
+import { planFor } from '@/lib/dose';
 import { findExercise } from '@/lib/protocol';
 import type { PracticeSessionInput } from '@/lib/progress';
 import { isExerciseComplete } from '@/lib/session-completion';
@@ -101,11 +102,21 @@ export function GuidedSession({ definition, onSave, onOpenSafety }: { definition
       trafficLight: zone,
       painAfter,
       notes: notes || null,
-      items: exercises.map((entry, index) => ({
-        exerciseId: entry.item.exercise_id,
-        prescription: entry.item.prescription,
-        completed: exerciseDone(index),
-      })),
+      items: exercises.map((entry, index) => {
+        const plan = planFor(entry.item.prescription ?? entry.exercise.dose, entry.exercise.tempo);
+        const completedSets = Array.from(
+          { length: plan.sets },
+          (_, setIndex) => completed.has(`${index}:${setIndex}`),
+        ).filter(Boolean).length;
+        return {
+          exerciseId: entry.item.exercise_id,
+          prescription: entry.item.prescription,
+          completed: completedSets === plan.sets,
+          plannedSets: plan.sets,
+          completedSets,
+          targetLabel: plan.targetLabel,
+        };
+      }),
     };
     await onSave(input);
     setStage('complete');

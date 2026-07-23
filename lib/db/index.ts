@@ -32,12 +32,14 @@ export async function persistenceHealth(): Promise<PersistenceHealth> {
       practiceSessions: string | null;
       symptomCheckins: string | null;
       participantPreferences: string | null;
+      accountImports: string | null;
     }>`
       select
         to_regclass('public.participants')::text as "participants",
         to_regclass('public.practice_sessions')::text as "practiceSessions",
         to_regclass('public.symptom_checkins')::text as "symptomCheckins",
-        to_regclass('public.participant_preferences')::text as "participantPreferences"
+        to_regclass('public.participant_preferences')::text as "participantPreferences",
+        to_regclass('public.account_imports')::text as "accountImports"
     `);
     const row = result.rows[0];
     return row && Object.values(row).every(Boolean) ? 'ready' : 'unavailable';

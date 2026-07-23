@@ -2,13 +2,17 @@ import { NextRequest, NextResponse } from 'next/server';
 import { getDb, isPersistenceConfigured } from '@/lib/db';
 import { symptomCheckins } from '@/lib/db/schema';
 import { symptomCheckinInputSchema } from '@/lib/progress';
-import { getOrCreateParticipantId } from '@/lib/server/participant';
+import { getRequestIdentity } from '@/lib/server/identity';
+import { participantIdForIdentity } from '@/lib/server/persistence-subject';
 import { requestIsSameOrigin } from '@/lib/server/request';
 
 export const runtime = 'nodejs';
 
 export async function POST(request: NextRequest) {
   if (!requestIsSameOrigin(request)) return NextResponse.json({ error: 'Invalid request origin.' }, { status: 403 });
+
+  const identity = await getRequestIdentity();
+  if (!identity) return NextResponse.json({ error: 'Authentication required.' }, { status: 401 });
   if (!isPersistenceConfigured()) return NextResponse.json({ mode: 'local', persisted: false }, { status: 503 });
 
   const parsed = symptomCheckinInputSchema.safeParse(await request.json().catch(() => null));
@@ -16,7 +20,7 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: 'Invalid symptom check-in.', fields: parsed.error.flatten() }, { status: 400 });
   }
 
-  const participantId = await getOrCreateParticipantId();
+  const participantId = await participantIdForIdentity(identity);
   const input = parsed.data;
   const [row] = await getDb()
     .insert(symptomCheckins)

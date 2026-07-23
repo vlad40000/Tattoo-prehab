@@ -6,7 +6,10 @@ export const sessionItemResultSchema = z.object({
   exerciseId: z.string().min(1).max(100),
   prescription: z.string().min(1).max(300),
   completed: z.boolean(),
-});
+  plannedSets: z.number().int().min(1).max(20).optional(),
+  completedSets: z.number().int().min(0).max(20).optional(),
+  targetLabel: z.string().min(1).max(120).optional(),
+}).strict();
 
 export const practiceSessionInputSchema = z.object({
   idempotencyKey: z.uuid(),
@@ -21,7 +24,7 @@ export const practiceSessionInputSchema = z.object({
   painAfter: z.number().int().min(0).max(10).nullable().optional(),
   notes: z.string().trim().max(1000).nullable().optional(),
   items: z.array(sessionItemResultSchema).min(1).max(40),
-});
+}).strict();
 
 export const symptomCheckinInputSchema = z.object({
   idempotencyKey: z.uuid(),
@@ -30,16 +33,24 @@ export const symptomCheckinInputSchema = z.object({
   discomfort: z.number().int().min(0).max(10).nullable().optional(),
   note: z.string().trim().max(500).nullable().optional(),
   occurredAt: isoDateTime,
-});
+}).strict();
+
+export const accountImportInputSchema = z.object({
+  importKey: z.uuid(),
+  sessions: z.array(practiceSessionInputSchema).max(200),
+  checkins: z.array(symptomCheckinInputSchema).max(200),
+}).strict();
 
 export type PracticeSessionInput = z.infer<typeof practiceSessionInputSchema>;
 export type SymptomCheckinInput = z.infer<typeof symptomCheckinInputSchema>;
+export type AccountImportInput = z.infer<typeof accountImportInputSchema>;
 
 export type ProgressSummary = {
   mode: 'cloud' | 'local';
   completedSessions: number;
   minutesCompleted: number;
   currentStreak: number;
+  weeklySessions: number;
   lastTrafficLight: 'green' | 'yellow' | 'red' | null;
   recentSessions: Array<{
     id: string;
@@ -47,5 +58,14 @@ export type ProgressSummary = {
     completedAt: string;
     durationSeconds: number;
     trafficLight: 'green' | 'yellow' | 'red';
+    completedExercises: number;
+    totalExercises: number;
+  }>;
+  exerciseProgress: Array<{
+    exerciseId: string;
+    completedSessions: number;
+    completedSets: number;
+    plannedSets: number;
+    lastCompletedAt: string;
   }>;
 };

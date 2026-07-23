@@ -12,18 +12,31 @@ import {
   Sparkles,
   Wrench,
 } from 'lucide-react';
-import { saveCheckin } from '@/lib/client/progress-store';
+import { AccountSyncCard } from '@/components/account/AccountSyncCard';
+import type { ClientAccountState } from '@/lib/account-scope';
 import { protocol } from '@/lib/protocol';
-import type { ProgressSummary } from '@/lib/progress';
+import type { ProgressSummary, SymptomCheckinInput } from '@/lib/progress';
 import type { AppView } from '../types';
 
 export function TodayView({
   summary,
+  accountState,
+  legacyRecords,
+  importing,
+  importMessage,
   loading,
+  onImportLegacy,
+  onSaveCheckin,
   onNavigate,
 }: {
   summary: ProgressSummary;
+  accountState: ClientAccountState;
+  legacyRecords: { sessions: number; checkins: number };
+  importing: boolean;
+  importMessage: string | null;
   loading: boolean;
+  onImportLegacy: () => void;
+  onSaveCheckin: (input: SymptomCheckinInput) => Promise<void>;
   onNavigate: (view: AppView) => void;
 }) {
   const [selectedZone, setSelectedZone] = useState<'green' | 'yellow' | 'red' | null>(summary.lastTrafficLight);
@@ -31,7 +44,7 @@ export function TodayView({
 
   const checkIn = async (zone: 'green' | 'yellow' | 'red') => {
     setSelectedZone(zone);
-    await saveCheckin({ idempotencyKey: crypto.randomUUID(), zone, occurredAt: new Date().toISOString() });
+    await onSaveCheckin({ idempotencyKey: crypto.randomUUID(), zone, occurredAt: new Date().toISOString() });
   };
 
   const recommendation = selectedZone === 'red'
@@ -71,6 +84,14 @@ export function TodayView({
           {summary.mode === 'cloud' ? 'Neon sync' : 'On-device'}
         </div>
       </header>
+
+      <AccountSyncCard
+        state={accountState}
+        legacyRecords={legacyRecords}
+        importing={importing}
+        message={importMessage}
+        onImport={onImportLegacy}
+      />
 
       <section className="today-dashboard" aria-label="Daily readiness and recommendation">
         <div className="readiness-card" aria-labelledby="readiness-title">
@@ -163,12 +184,16 @@ export function TodayView({
               <p className="kicker">Your capacity</p>
               <h2>Consistency, not exhaustion.</h2>
             </div>
-            {loading && <span className="loading-label">Loading progress…</span>}
+            <div className="section-heading__actions">
+              {loading && <span className="loading-label">Loading progress…</span>}
+              <button type="button" className="text-button" onClick={() => onNavigate('progress')}>View all progress <ArrowRight size={15} aria-hidden /></button>
+            </div>
           </div>
-          <div className="metric-grid">
+          <div className="metric-grid metric-grid--four">
             <Metric value={summary.completedSessions} label="Sessions" />
             <Metric value={summary.minutesCompleted} label="Minutes" />
             <Metric value={summary.currentStreak} label="Day streak" />
+            <Metric value={summary.weeklySessions} label="This week" />
           </div>
           {summary.recentSessions.length > 0 ? (
             <div className="recent-list">

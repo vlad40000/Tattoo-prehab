@@ -29,7 +29,7 @@ for (const path of [
 
 const pkg = JSON.parse(read('package.json'));
 if (pkg.name !== 'tattoo-prehab') problems.push(`Unexpected package name: ${pkg.name}`);
-if (pkg.version !== '5.0.0') problems.push(`Unexpected package version: ${pkg.version}`);
+if (!/^5\.|^6\./.test(pkg.version)) problems.push(`Unexpected package version: ${pkg.version}`);
 
 const shell = read('components/app/TattooPrehabApp.tsx');
 for (const label of ['Today', 'Train', 'Learn', 'Station', 'Symptoms']) {

@@ -21,28 +21,32 @@ The interaction model deliberately combines two patterns:
 
 `lib/videos.ts` contains 21 approved instructional records: 20 exercise videos and one reset-step video. Video buttons are visible in exercise rows and beside the matching reset instruction. Privacy-enhanced YouTube iframes are created only after user interaction, and every modal also exposes a direct YouTube link. Video failure never blocks the written protocol.
 
-## Persistence boundary
+## Persistence and account boundary
 
-`lib/db/index.ts` lazily creates the Neon client. No database client is initialized at module scope, so `next build` succeeds without secrets.
+`lib/db/index.ts` lazily creates the Neon client. No database client is initialized at module scope, so `next build` succeeds without database secrets.
 
-When Neon is configured:
+Clerk is also provisioned as an environment-gated integration. When Clerk keys are absent, the application remains in private device mode. When they are present:
 
-1. The server creates a random UUID participant ID.
-2. The ID is signed with HMAC-SHA256 and stored in an HTTP-only, SameSite cookie.
-3. Every read and write is scoped to that participant.
-4. Client-generated idempotency keys prevent duplicate session and check-in writes.
-5. The browser maintains a local queue and retries unsynced session records.
+1. `proxy.ts` establishes Clerk request context on Next.js 16.
+2. The root page requires an authenticated session.
+3. Each protected route independently resolves the current Clerk subject server-side.
+4. `participants.clerk_user_id` maps that subject to the internal UUID foreign-key model.
+5. A valid signed anonymous participant on the same browser may be claimed, preserving previously cloud-synced device history.
+6. Client payloads cannot provide `participant_id` or `user_id`; strict schemas reject unknown ownership fields.
 
-This is suitable for private anonymous-device progress. It is not an account system. Before exposing sensitive cross-device records or public multi-user features, add an approved authentication provider and map its stable subject to `participants`.
+Local queues distinguish device records from account records. Account records carry an opaque HMAC-derived account key, preventing a second account on the same shared iPad from displaying or synchronizing the first account's unsynced history.
+
+Existing device sessions and check-ins require an explicit one-time import. Import receipts plus per-record idempotency keys make retries safe, and local records are not re-scoped until the server confirms success.
 
 ## Database tables
 
-- `participants`: anonymous persistence subjects.
-- `practice_sessions`: routine/strength results, traffic-light response, duration, and completed items.
+- `participants`: internal persistence subjects with an optional unique Clerk user mapping.
+- `practice_sessions`: routine/strength results, traffic-light response, duration, completed exercises, and set totals.
 - `symptom_checkins`: lightweight readiness and symptom records.
 - `participant_preferences`: current week and accessibility preferences.
+- `account_imports`: bounded, idempotent device-history import receipts.
 
-The canonical medical protocol is deliberately not stored in Postgres. It is version-controlled, reviewed content and should change through pull requests, schema validation, and parity tests.
+The canonical medical protocol is deliberately not stored in Postgres. It remains version-controlled, reviewed content and changes through pull requests, schema validation, and parity tests.
 
 ## Security boundary
 

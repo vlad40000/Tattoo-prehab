@@ -8,10 +8,11 @@ const [row] = await sql`
     to_regclass('public.participants')::text as participants,
     to_regclass('public.practice_sessions')::text as practice_sessions,
     to_regclass('public.symptom_checkins')::text as symptom_checkins,
-    to_regclass('public.participant_preferences')::text as participant_preferences
+    to_regclass('public.participant_preferences')::text as participant_preferences,
+    to_regclass('public.account_imports')::text as account_imports
 `;
 
-const required = ['participants', 'practice_sessions', 'symptom_checkins', 'participant_preferences'];
+const required = ['participants', 'practice_sessions', 'symptom_checkins', 'participant_preferences', 'account_imports'];
 const missing = required.filter((name) => !row?.[name]);
 
 if (missing.length) {

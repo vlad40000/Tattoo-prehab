@@ -11,8 +11,10 @@ import {
   ShieldAlert,
   Wrench,
 } from 'lucide-react';
+import { AccountControl } from '@/components/account/AccountControl';
 import { SafetyModal } from '@/components/SafetyModal';
 import { useProgress } from '@/lib/client/progress-store';
+import { ProgressView } from './views/ProgressView';
 import { RoutineView } from './views/RoutineView';
 import { TrainView } from './views/TrainView';
 import { StrengthView } from './views/StrengthView';
@@ -43,7 +45,7 @@ const navigation = [
 
 const TRAIN_VIEWS = new Set<AppView>(['prepare', 'reset', 'recover', 'strength']);
 
-export function TattooPrehabApp() {
+export function TattooPrehabApp({ accountsEnabled = false }: { accountsEnabled?: boolean }) {
   const [view, setView] = useState<AppView>('today');
   const [safetyOpen, setSafetyOpen] = useState(false);
   const progress = useProgress();
@@ -61,14 +63,30 @@ export function TattooPrehabApp() {
           </span>
         </button>
         <div className="app-top__meta" aria-label="Protocol coverage">33 exercises · 21 videos</div>
-        <button className="stop-chip" type="button" onClick={() => setSafetyOpen(true)}>
-          <ShieldAlert size={16} aria-hidden />
-          <span>Stop rules</span>
-        </button>
+        <div className="app-top__actions">
+          <button className="stop-chip" type="button" onClick={() => setSafetyOpen(true)}>
+            <ShieldAlert size={16} aria-hidden />
+            <span>Stop rules</span>
+          </button>
+          {accountsEnabled && <AccountControl />}
+        </div>
       </header>
 
       <main id="main-content" className="app-main" tabIndex={-1}>
-        {view === 'today' && <TodayView summary={progress.summary} loading={progress.loading} onNavigate={setView} />}
+        {view === 'today' && (
+          <TodayView
+            summary={progress.summary}
+            accountState={progress.accountState}
+            legacyRecords={progress.legacyRecords}
+            importing={progress.importing}
+            importMessage={progress.importMessage}
+            loading={progress.loading}
+            onImportLegacy={() => void progress.importLegacy()}
+            onSaveCheckin={progress.saveCheckin}
+            onNavigate={setView}
+          />
+        )}
+        {view === 'progress' && <ProgressView summary={progress.summary} loading={progress.loading} onBack={() => setView('today')} />}
         {view === 'train' && <TrainView onNavigate={setView} />}
         {view === 'prepare' && <RoutineView routineId="pre-session" eyebrow="Before precision work" onSave={progress.saveSession} onOpenSafety={() => setSafetyOpen(true)} />}
         {view === 'reset' && <RoutineView routineId="session-reset" eyebrow="During long appointments" onSave={progress.saveSession} onOpenSafety={() => setSafetyOpen(true)} />}

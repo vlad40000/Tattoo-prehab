@@ -12,10 +12,28 @@ describe('Tattoo Prehab application shell', () => {
 
   beforeEach(() => {
     window.localStorage.clear();
-    vi.stubGlobal('fetch', vi.fn(async () => ({
-      ok: true,
-      json: async () => ({ mode: 'local', completedSessions: 0, minutesCompleted: 0, currentStreak: 0, lastTrafficLight: null, recentSessions: [] }),
-    })));
+    vi.stubGlobal('fetch', vi.fn(async (input: RequestInfo | URL) => {
+      const url = String(input);
+      if (url.includes('/api/account/status')) {
+        return {
+          ok: true,
+          json: async () => ({ auth: 'unconfigured', persistence: 'local-only', syncReady: false }),
+        };
+      }
+      return {
+        ok: true,
+        json: async () => ({
+          mode: 'local',
+          completedSessions: 0,
+          minutesCompleted: 0,
+          currentStreak: 0,
+          weeklySessions: 0,
+          lastTrafficLight: null,
+          recentSessions: [],
+          exerciseProgress: [],
+        }),
+      };
+    }));
   });
 
   it('renders branching readiness guidance before the workday actions', () => {

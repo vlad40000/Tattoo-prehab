@@ -22,6 +22,7 @@ describe('health route', () => {
     await expect(response.json()).resolves.toEqual({
       ok: true,
       service: 'tattoo-prehab',
+      authentication: 'device',
       persistence: 'local-only',
     });
   });

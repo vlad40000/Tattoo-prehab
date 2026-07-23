@@ -1,13 +1,24 @@
 import type { NextConfig } from 'next';
 
+const accountsEnabled = Boolean(
+  process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY?.trim() &&
+    process.env.CLERK_SECRET_KEY?.trim(),
+);
+
+const clerkScriptSources = accountsEnabled
+  ? ' https://*.clerk.accounts.dev https://challenges.cloudflare.com'
+  : '';
+
 const scriptSources = process.env.NODE_ENV === 'development'
-  ? "script-src 'self' 'unsafe-inline' 'unsafe-eval'"
-  : "script-src 'self' 'unsafe-inline'";
+  ? `script-src 'self' 'unsafe-inline' 'unsafe-eval'${clerkScriptSources}`
+  : `script-src 'self' 'unsafe-inline'${clerkScriptSources}`;
+
+const connectSources = accountsEnabled
+  ? "connect-src 'self' https://*.clerk.accounts.dev https://clerk-telemetry.com https://*.clerk-telemetry.com"
+  : "connect-src 'self'";
 
 const nextConfig: NextConfig = {
   reactStrictMode: true,
-  // three.js ships untranspiled ESM examples; Next handles this natively,
-  // but drei pulls a few packages that benefit from explicit transpilation.
   transpilePackages: ['three'],
   poweredByHeader: false,
   experimental: {
@@ -31,10 +42,13 @@ const nextConfig: NextConfig = {
               "default-src 'self'",
               scriptSources,
               "style-src 'self' 'unsafe-inline'",
-              "img-src 'self' blob: data:",
+              accountsEnabled ? "img-src 'self' blob: data: https://img.clerk.com" : "img-src 'self' blob: data:",
               "font-src 'self' data:",
-              "connect-src 'self'",
-              "frame-src https://www.youtube-nocookie.com",
+              connectSources,
+              accountsEnabled
+                ? "frame-src https://www.youtube-nocookie.com https://challenges.cloudflare.com"
+                : "frame-src https://www.youtube-nocookie.com",
+              "worker-src 'self' blob:",
               "media-src 'self'",
               "object-src 'none'",
               "base-uri 'self'",
