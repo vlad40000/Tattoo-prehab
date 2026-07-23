@@ -1,6 +1,7 @@
 import { fireEvent, render, screen, waitFor, within } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
 import { GuidedSession } from '@/components/app/GuidedSession';
+import type { PracticeSessionInput } from '@/lib/progress';
 
 const definition = {
   sourceType: 'strength' as const,
@@ -12,7 +13,7 @@ const definition = {
 
 describe('session completion semantics', () => {
   it('requires every planned set before recording an exercise complete', async () => {
-    const onSave = vi.fn(async () => undefined);
+    const onSave = vi.fn(async (_session: PracticeSessionInput) => undefined);
     render(<GuidedSession definition={definition} onSave={onSave} onOpenSafety={() => undefined} />);
     fireEvent.click(screen.getByRole('button', { name: /start guided session/i }));
     const runner = screen.getByRole('dialog', { name: /running session/i });
@@ -21,6 +22,8 @@ describe('session completion semantics', () => {
     fireEvent.click(screen.getByRole('button', { name: /save session/i }));
 
     await waitFor(() => expect(onSave).toHaveBeenCalledTimes(1));
-    expect(onSave.mock.calls[0][0].items[0].completed).toBe(false);
+    const saved = onSave.mock.calls[0]?.[0];
+    expect(saved).toBeDefined();
+    expect(saved?.items[0]?.completed).toBe(false);
   });
 });
