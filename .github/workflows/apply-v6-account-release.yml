@@ -58,7 +58,19 @@ jobs:
           npm run db:generate
 
       - name: Run complete Node 24 release gates
-        run: npm run build
+        shell: bash
+        run: |
+          set -o pipefail
+          npm run build 2>&1 | tee /tmp/v6-account-build.log
+
+      - name: Upload failed release log
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: v6-account-build-log-${{ github.run_id }}
+          path: /tmp/v6-account-build.log
+          if-no-files-found: ignore
+          retention-days: 1
 
       - name: Commit exact account release
         shell: bash
