@@ -7,7 +7,7 @@ import type { PracticeSessionInput } from '@/lib/progress';
 import { GuidedSession } from '../GuidedSession';
 import type { SessionDefinition } from '../types';
 
-export function StrengthView({ onSave }: { onSave: (session: PracticeSessionInput) => Promise<void> }) {
+export function StrengthView({ onSave, onOpenSafety }: { onSave: (session: PracticeSessionInput) => Promise<void>; onOpenSafety: () => void }) {
   const [week, setWeek] = useState(1);
   const [selected, setSelected] = useState<SessionDefinition | null>(null);
   const phase = protocol.program.phases.find((item) => week >= item.weeks[0] && week <= item.weeks[1]) ?? protocol.program.phases[0];
@@ -20,7 +20,7 @@ export function StrengthView({ onSave }: { onSave: (session: PracticeSessionInpu
         <header className="page-header page-header--compact">
           <div><p className="kicker">Week {week} · {phase.name}</p><h1>{selected.label}</h1><p className="lede">Strength should support the next tattoo day, not compete with it.</p></div>
         </header>
-        <GuidedSession definition={selected} onSave={onSave} />
+        <GuidedSession definition={selected} onSave={onSave} onOpenSafety={onOpenSafety} />
       </div>
     );
   }

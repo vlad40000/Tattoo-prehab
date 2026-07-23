@@ -2,13 +2,13 @@ import { z } from 'zod';
 import { allExercises, routines } from './protocol';
 import { exerciseVideoSchema, type ExerciseVideo } from './protocol-schema';
 
-const candidateSchema = z.object({
+const videoRecordSchema = z.object({
   ownerType: z.enum(['exercise', 'reset-step']),
   ownerId: z.string().min(1),
   video: exerciseVideoSchema,
 });
 
-const rawCandidates = [
+const approvedVideos = [
   ['exercise', 'deep-neck-flexor-chin-nod', 'Pwzr3HxDhuo'],
   ['exercise', 'serratus-wall-slide', 'oMSVe7PWJ3o'],
   ['exercise', 'supported-one-arm-row', 'DMo3HJoawrU'],
@@ -32,41 +32,59 @@ const rawCandidates = [
   ['reset-step', 'slow-shoulder-blade-circles', 'UX_I0NAb4Z8'],
 ] as const;
 
-export const videoCandidates = z.array(candidateSchema).parse(
-  rawCandidates.map(([ownerType, ownerId, videoId]) => ({
+const approval = {
+  reviewStatus: 'verified' as const,
+  reviewedBy: 'Razor',
+  reviewedAt: '2026-07-23',
+  variationVerified: true,
+  captionsVerified: true,
+  embeddable: true,
+  reviewerNotes: 'Approved instructional video for the Tattoo Prehab application.',
+};
+
+export const videoLibrary = z.array(videoRecordSchema).parse(
+  approvedVideos.map(([ownerType, ownerId, videoId]) => ({
     ownerType,
     ownerId,
-    video: { provider: 'youtube', videoId, reviewStatus: 'candidate' },
+    video: { provider: 'youtube', videoId, ...approval },
   })),
 );
 
-function validateCandidateInventory() {
+// Backward-compatible export retained for existing imports and fixtures.
+export const videoCandidates = videoLibrary;
+
+function validateVideoInventory() {
   const exerciseIds = new Set(allExercises.map((exercise) => exercise.id));
   const resetSteps = routines.find((routine) => routine.id === 'session-reset')?.steps ?? [];
   const ids = new Set<string>();
   const problems: string[] = [];
 
-  for (const candidate of videoCandidates) {
-    if (ids.has(candidate.video.videoId)) problems.push(`Duplicate video ID: ${candidate.video.videoId}`);
-    ids.add(candidate.video.videoId);
-    if (candidate.ownerType === 'exercise' && !exerciseIds.has(candidate.ownerId)) {
-      problems.push(`Unknown exercise video owner: ${candidate.ownerId}`);
+  for (const record of videoLibrary) {
+    if (ids.has(record.video.videoId)) problems.push(`Duplicate video ID: ${record.video.videoId}`);
+    ids.add(record.video.videoId);
+    if (record.ownerType === 'exercise' && !exerciseIds.has(record.ownerId)) {
+      problems.push(`Unknown exercise video owner: ${record.ownerId}`);
     }
     if (
-      candidate.ownerType === 'reset-step' &&
+      record.ownerType === 'reset-step' &&
       !resetSteps.some((step) => step.toLowerCase().includes('shoulder-blade circles'))
     ) {
-      problems.push(`Reset video owner does not match the canonical reset: ${candidate.ownerId}`);
+      problems.push(`Reset video owner does not match the canonical reset: ${record.ownerId}`);
     }
   }
 
-  if (problems.length) throw new Error(`Invalid video candidate inventory:\n${problems.join('\n')}`);
+  if (problems.length) throw new Error(`Invalid video inventory:\n${problems.join('\n')}`);
 }
 
-validateCandidateInventory();
+validateVideoInventory();
 
 export function videoForExercise(exerciseId: string): ExerciseVideo | null {
-  return videoCandidates.find((item) => item.ownerType === 'exercise' && item.ownerId === exerciseId)?.video ?? null;
+  return videoLibrary.find((item) => item.ownerType === 'exercise' && item.ownerId === exerciseId)?.video ?? null;
+}
+
+export function videoForResetStep(step: string): ExerciseVideo | null {
+  if (!step.toLowerCase().includes('shoulder-blade circles')) return null;
+  return videoLibrary.find((item) => item.ownerType === 'reset-step')?.video ?? null;
 }
 
 export function youtubeWatchUrl(videoId: string): string {
@@ -74,6 +92,7 @@ export function youtubeWatchUrl(videoId: string): string {
 }
 
 export function youtubeEmbedUrl(videoId: string, startSeconds?: number): string {
-  const start = startSeconds ? `?start=${startSeconds}` : '';
-  return `https://www.youtube-nocookie.com/embed/${videoId}${start}`;
+  const params = new URLSearchParams({ rel: '0', modestbranding: '1' });
+  if (startSeconds) params.set('start', String(startSeconds));
+  return `https://www.youtube-nocookie.com/embed/${videoId}?${params.toString()}`;
 }

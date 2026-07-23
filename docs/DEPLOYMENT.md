@@ -52,6 +52,10 @@ Run additive/backward-compatible migrations before promoting code that requires 
 - `npm run db:check` confirms all four required tables.
 - `/api/health` reports `persistence: ready` in the target environment; `configured` is not accepted because it does not prove connectivity or schema readiness.
 - Neon migrations match the checked-in journal.
-- Prepare, Reset, Recover, Strength, Workstation, Symptoms, and Learn pass at 1024×1366 and 1366×1024.
-- Candidate videos produce no button or iframe.
+- The five primary tabs—Today, Train, Learn, Station, and Symptoms—pass at 1024×1366 and 1366×1024.
+- Train launches Prepare, Reset, Recover, and the 12-week strength program without adding more primary navigation items.
+- Learn defaults to the searchable 33-exercise list and exposes anatomy as an optional secondary mode.
+- The guided runner preserves set state, elapsed time, and current movement across Pause/Resume; Restart and Discard explicitly clear that state.
+- Exercise completion is persisted only after every planned set is complete.
+- All 21 approved video records expose a button, while iframes remain unmounted until the user opens a video.
 - Stop rules are keyboard operable and return focus to the trigger.

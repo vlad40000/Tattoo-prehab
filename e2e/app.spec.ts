@@ -1,18 +1,35 @@
 import { expect, test } from '@playwright/test';
 
-test('workday shell exposes core workflows', async ({ page }) => {
+test('Tattoo Prehab readiness branches and launches the guided runner', async ({ page }) => {
   await page.goto('/');
-  await expect(page.getByRole('heading', { name: /protect the hand/i })).toBeVisible();
-  await page.getByRole('button', { name: 'Prepare' }).first().click();
-  await expect(page.getByRole('heading', { name: /eight-minute pre-session routine/i })).toBeVisible();
+  await expect(page.getByRole('heading', { name: /keep tattooing/i })).toBeVisible();
+  await page.getByRole('button', { name: /red/i }).click();
+  await expect(page.getByRole('heading', { name: /review symptoms before training/i })).toBeVisible();
+
+  await page.getByRole('navigation', { name: /primary navigation/i }).getByRole('button', { name: 'Train' }).click();
+  await page.getByRole('button', { name: /eight-minute pre-session routine/i }).first().click();
   await expect(page.getByText('90/90 Breathing Reset').first()).toBeVisible();
+  await expect(page.getByRole('button', { name: /watch 90\/90 breathing reset demonstration/i })).toBeVisible();
+  await page.getByRole('button', { name: /start guided session/i }).click();
+
+  const runner = page.getByRole('dialog', { name: /running session/i });
+  await expect(runner.getByRole('heading', { name: '90/90 Breathing Reset' })).toBeVisible();
+  await runner.getByRole('button', { name: /complete set 1/i }).click();
+  await expect(runner.getByRole('button', { name: /set 1 complete/i })).toHaveAttribute('aria-pressed', 'true');
+  await runner.getByRole('button', { name: /open stop rules/i }).click();
+  await expect(page.getByRole('heading', { name: /how to read what you are feeling/i })).toBeVisible();
+  await page.getByRole('button', { name: /close stop rules/i }).click();
+  await runner.getByRole('button', { name: /pause and leave session/i }).click();
+  await expect(page.getByText(/session paused/i)).toBeVisible();
+  await expect(page.getByRole('button', { name: /resume/i })).toBeVisible();
+  await expect(page.getByRole('button', { name: /restart/i })).toBeVisible();
+  await expect(page.getByRole('button', { name: /discard/i })).toBeVisible();
 });
 
-test('learn area exposes all 33 exercises by region', async ({ page }) => {
+test('exercise library exposes all 33 exercises and approved-video indicators', async ({ page }) => {
   await page.goto('/');
-  await page.getByRole('button', { name: 'Learn' }).first().click();
-  await expect(page.getByText('33 manual-aligned exercises')).toBeVisible();
-  await page.getByRole('button', { name: 'List', exact: true }).click();
+  await page.getByRole('navigation', { name: /primary navigation/i }).getByRole('button', { name: 'Learn' }).click();
+  await expect(page.getByText('33 exercises · 21 video guides')).toBeVisible();
   const regionButtons = page.locator('.region-group > button');
   await expect(regionButtons).toHaveCount(5);
   const counts = await page.locator('.region-group > button em').allTextContents();

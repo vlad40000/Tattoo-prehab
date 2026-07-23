@@ -2,18 +2,20 @@
 
 import { useEffect, useMemo, useRef, useState } from 'react';
 import * as THREE from 'three';
-import type { ThreeEvent } from '@react-three/fiber';
-import { RIG_GROUP_OFFSET, RIG_PARTS_EXPANDED, type RigPart } from '@/lib/proceduralRig';
-import { activationOf, materialFor } from '@/lib/materials';
+import { useFrame, type ThreeEvent } from '@react-three/fiber';
+import { RIG_GROUP_OFFSET, RIG_PARTS, RIG_PARTS_EXPANDED, type RigPart } from '@/lib/proceduralRig';
+import { activationOf, materialFor, type Activation } from '@/lib/materials';
+import { EXERCISES_BY_MUSCLE } from '@/lib/muscleIndex';
 import type { MuscleId } from '@/lib/muscleRegistry';
 import type { MuscleState } from '@/lib/protocol';
 import MuscleTooltip from './MuscleTooltip';
 
-/** Squared pixel distance below which a pointer down→up pair counts as a tap
- *  rather than an orbit drag. */
-const TAP_SLOP_SQ = 12 * 12;
+/** Pixel distance (r3f event.delta) below which a pointer down→up pair counts
+ *  as a tap rather than an orbit drag. */
+const TAP_SLOP = 12;
 
-type TapStart = { x: number; y: number; id: string };
+const reducedMotion = () =>
+  typeof window !== 'undefined' && window.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
 
 function Geometry({ geom, args }: { geom: RigPart['geom']; args: number[] }) {
   switch (geom) {
@@ -28,67 +30,78 @@ function Geometry({ geom, args }: { geom: RigPart['geom']; args: number[] }) {
   }
 }
 
+/** Breathing glow on the actively selected muscle. */
+function useEmissivePulse(ref: React.MutableRefObject<THREE.MeshStandardMaterial | null>, activation: Activation, base: number) {
+  useFrame(({ clock }) => {
+    if (!ref.current) return;
+    if (activation !== 'primary' || reducedMotion()) {
+      ref.current.emissiveIntensity = base;
+      return;
+    }
+    ref.current.emissiveIntensity = base + Math.sin(clock.elapsedTime * 2.4) * 0.45;
+  });
+}
+
 function RigMesh({
   part,
   muscleState,
   hoveredId,
   onHover,
-  tapStart,
   onSelect,
 }: {
   part: RigPart;
   muscleState: MuscleState;
   hoveredId: string | null;
   onHover: (id: string | null) => void;
-  tapStart: React.MutableRefObject<TapStart | null>;
   onSelect?: (id: MuscleId) => void;
 }) {
-  const interactive = part.id !== null;
+  // A node is interactive only if tapping it can lead somewhere. The five
+  // decorative-only muscles (Head, SCM, …) render as anatomy but never
+  // capture the pointer, so a tap can't dead-end on "no exercises".
+  const interactive = part.id !== null && EXERCISES_BY_MUSCLE.has(part.id);
   const isHovered = interactive && hoveredId === part.id;
   const activation = activationOf(part.id, muscleState, isHovered);
   const mat = useMemo(() => materialFor(activation), [activation]);
+  const matRef = useRef<THREE.MeshStandardMaterial | null>(null);
+  useEmissivePulse(matRef, activation, mat.emissiveIntensity);
 
-  // Structural scaffolding stays quiet and never captures the pointer.
-  if (!interactive) {
+  // Structural silhouette: quiet carbon shell, never captures the pointer.
+  if (part.id === null) {
     return (
-      <mesh position={part.pos} rotation={part.rot} raycast={() => null}>
+      <mesh position={part.pos} rotation={part.rot} scale={part.scale} raycast={() => null}>
         <Geometry geom={part.geom} args={part.args} />
-        <meshStandardMaterial color="#0a1826" roughness={0.95} metalness={0.05} transparent opacity={0.5} />
+        <meshStandardMaterial color="#0c151f" roughness={0.5} metalness={0.35} transparent opacity={0.92} />
       </mesh>
     );
   }
 
   return (
     <mesh
-      name={part.id!}
+      name={part.id}
       position={part.pos}
       rotation={part.rot}
-      onPointerOver={(e: ThreeEvent<PointerEvent>) => {
-        e.stopPropagation();
-        onHover(part.id);
-      }}
-      onPointerOut={(e: ThreeEvent<PointerEvent>) => {
-        e.stopPropagation();
-        onHover(null);
-      }}
-      onPointerDown={
-        onSelect
+      scale={part.scale}
+      raycast={interactive ? undefined : () => null}
+      onPointerOver={
+        interactive
           ? (e: ThreeEvent<PointerEvent>) => {
-              // Do not stopPropagation: OrbitControls must still receive the
-              // event so a drag that starts on a muscle can orbit the camera.
-              tapStart.current = { x: e.nativeEvent.clientX, y: e.nativeEvent.clientY, id: part.id! };
+              e.stopPropagation();
+              onHover(part.id);
             }
           : undefined
       }
-      onPointerUp={
-        onSelect
+      onPointerOut={
+        interactive
           ? (e: ThreeEvent<PointerEvent>) => {
-              const start = tapStart.current;
-              tapStart.current = null;
-              if (!start || start.id !== part.id) return;
-              const dx = e.nativeEvent.clientX - start.x;
-              const dy = e.nativeEvent.clientY - start.y;
-              if (dx * dx + dy * dy > TAP_SLOP_SQ) return; // it was an orbit drag
+              e.stopPropagation();
+              onHover(null);
+            }
+          : undefined
+      }
+      onClick={
+        interactive && onSelect
+          ? (e: ThreeEvent<MouseEvent>) => {
+              if (e.delta > TAP_SLOP) return; // it was an orbit drag
               e.stopPropagation();
               onSelect(part.id as MuscleId);
             }
@@ -97,6 +110,7 @@ function RigMesh({
     >
       <Geometry geom={part.geom} args={part.args} />
       <meshStandardMaterial
+        ref={matRef}
         color={mat.color}
         emissive={new THREE.Color(mat.emissive)}
         emissiveIntensity={mat.emissiveIntensity}
@@ -106,7 +120,6 @@ function RigMesh({
         metalness={mat.metalness}
         depthWrite={!mat.transparent || mat.opacity > 0.5}
       />
-      {isHovered && <MuscleTooltip muscleId={part.id!} activation={activation} />}
     </mesh>
   );
 }
@@ -126,7 +139,15 @@ export default function ProceduralAnatomy({
   onSelectMuscle?: (id: MuscleId) => void;
 }) {
   const [hoveredId, setHoveredId] = useState<string | null>(null);
-  const tapStart = useRef<TapStart | null>(null);
+
+  // Mirrored L/R parts share one muscle id, so anchor the single label to
+  // the unmirrored source part. Two overlapping tooltips is a defect.
+  const labelAnchor = useMemo(() => {
+    if (!hoveredId) return null;
+    const part = RIG_PARTS.find((p) => p.id === hoveredId);
+    if (!part) return null;
+    return [part.pos[0], part.pos[1] + 0.3, part.pos[2]] as [number, number, number];
+  }, [hoveredId]);
 
   // Pointer feedback for mouse / trackpad / Pencil hover.
   useEffect(() => {
@@ -146,10 +167,16 @@ export default function ProceduralAnatomy({
           muscleState={muscleState}
           hoveredId={hoveredId}
           onHover={setHoveredId}
-          tapStart={tapStart}
           onSelect={onSelectMuscle}
         />
       ))}
+      {hoveredId && labelAnchor && (
+        <MuscleTooltip
+          muscleId={hoveredId}
+          activation={activationOf(hoveredId, muscleState, true)}
+          position={labelAnchor}
+        />
+      )}
     </group>
   );
 }

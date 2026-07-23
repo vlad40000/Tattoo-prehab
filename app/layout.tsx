@@ -6,19 +6,19 @@ import './globals.css';
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL ?? 'http://localhost:3000'),
   title: {
-    default: 'Machine Hand — Tattoo Artist Longevity',
-    template: '%s · Machine Hand',
+    default: 'Tattoo Prehab — Artist Longevity',
+    template: '%s · Tattoo Prehab',
   },
   description:
     'A workday companion for tattoo artists: prepare, reset, recover, build capacity, and improve workstation ergonomics.',
-  applicationName: 'Machine Hand',
+  applicationName: 'Tattoo Prehab',
   manifest: '/manifest.webmanifest',
-  appleWebApp: { capable: true, statusBarStyle: 'black-translucent', title: 'Machine Hand' },
+  appleWebApp: { capable: true, statusBarStyle: 'black-translucent', title: 'Tattoo Prehab' },
   formatDetection: { telephone: false },
 };
 
 export const viewport: Viewport = {
-  themeColor: '#02060f',
+  themeColor: '#0a0b10',
   width: 'device-width',
   initialScale: 1,
   // No maximumScale / user-scalable lock: pinch-zoom is a WCAG 1.4.4

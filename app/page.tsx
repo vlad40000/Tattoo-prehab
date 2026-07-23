@@ -1,5 +1,5 @@
-import { MachineHandApp } from '@/components/app/MachineHandApp';
+import { TattooPrehabApp } from '@/components/app/TattooPrehabApp';
 
 export default function Page() {
-  return <MachineHandApp />;
+  return <TattooPrehabApp />;
 }

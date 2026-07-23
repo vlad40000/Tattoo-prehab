@@ -6,7 +6,8 @@ import { cookies } from 'next/headers';
 import { getDb } from '@/lib/db';
 import { participants } from '@/lib/db/schema';
 
-const COOKIE_NAME = 'machine_hand_device';
+const COOKIE_NAME = 'tattoo_prehab_device';
+const LEGACY_COOKIE_NAME = 'machine_hand_device';
 const COOKIE_MAX_AGE = 60 * 60 * 24 * 365;
 
 function secret(): string {
@@ -31,10 +32,11 @@ function parseSignedId(value: string | undefined): string | null {
 
 export async function getOrCreateParticipantId(): Promise<string> {
   const store = await cookies();
-  const existing = parseSignedId(store.get(COOKIE_NAME)?.value);
-  const participantId = existing ?? randomUUID();
+  const current = parseSignedId(store.get(COOKIE_NAME)?.value);
+  const legacy = parseSignedId(store.get(LEGACY_COOKIE_NAME)?.value);
+  const participantId = current ?? legacy ?? randomUUID();
 
-  if (!existing) {
+  if (!current) {
     store.set(COOKIE_NAME, `${participantId}.${signature(participantId)}`, {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
@@ -55,7 +57,7 @@ export async function getOrCreateParticipantId(): Promise<string> {
 
 export async function existingParticipantId(): Promise<string | null> {
   const store = await cookies();
-  const participantId = parseSignedId(store.get(COOKIE_NAME)?.value);
+  const participantId = parseSignedId(store.get(COOKIE_NAME)?.value) ?? parseSignedId(store.get(LEGACY_COOKIE_NAME)?.value);
   if (!participantId) return null;
   const row = await getDb().query.participants.findFirst({ where: eq(participants.id, participantId) });
   return row?.id ?? null;

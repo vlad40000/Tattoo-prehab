@@ -1,79 +1,58 @@
-# Machine Hand
+# Tattoo Prehab v5
 
-Machine Hand is an iPad-first workday longevity application for tattoo artists. It turns the Tattoo Artist Physical Longevity Manual into seven usable modes:
+Tattoo Prehab is an iPad-first workday longevity application for tattoo artists. It combines a low-friction workout runner with a guided readiness flow, while preserving the Tattoo Artist Physical Longevity Manual as the written authority.
 
-- Prepare before precision work.
-- Reset between appointments or at natural stopping points.
-- Recover after the last appointment.
-- Follow a 12-week foundational strength program.
-- Audit workstation ergonomics and shop checklists.
-- Modify work and exercise when symptoms appear.
-- Learn all 33 manual-aligned exercises with an optional anatomy aid.
+## Core experience
 
-The written protocol is the authority. The 3D anatomy view and third-party demonstration videos are supplementary.
+- **Today:** readiness check that changes the recommended action.
+- **Train:** Prepare, Reset, Recover, and the 12-week strength program in one launcher.
+- **Learn:** searchable list of all 33 exercises, approved video indicators, and optional interactive anatomy.
+- **Station:** ergonomics and shop-setup checklists.
+- **Symptoms:** modification guidance and stop rules.
 
-## Production stack
+Guided sessions include set-by-set completion, conservative dose parsing, hold timers, inline approved YouTube instruction, pause/resume, and explicit restart/discard controls.
 
-- Next.js 16 App Router and React 19
-- TypeScript with strict checking
-- Neon Postgres through `@neondatabase/serverless`
-- Drizzle ORM and checked-in SQL migrations
-- Zod validation at protocol, API, and video-review boundaries
-- Vitest, Testing Library, and Playwright
-- Vercel Git deployments
+## Verified instruction inventory
 
-## Local setup
+`lib/videos.ts` contains 20 exercise demonstrations and one reset-step demonstration. All 21 supplied records are approved and visible at their mapped instruction points. Exercises without an approved record do not link to generic YouTube search results.
 
-Requirements: Node 24 and npm 11.
+## Canonical protocol
+
+`data/protocol.v2.json` contains exactly 33 exercises:
+
+- 7 shoulders and neck
+- 6 spine and core
+- 6 hips
+- 7 knees and ankles
+- 7 hands and wrists
+
+Run the independent parity check:
+
+```bash
+npm run verify
+```
+
+## Local development
+
+Use Node 24, matching `package.json`:
 
 ```bash
 npm ci
-cp .env.example .env.local
 npm run dev
 ```
-
-The app runs in local-only mode when `DATABASE_URL` and `SESSION_SECRET` are absent. Progress remains on the current device. To enable Neon persistence, configure both variables and run:
-
-```bash
-npm run db:migrate
-npm run db:check
-```
-
-Generate `SESSION_SECRET` with a cryptographically secure random generator; use at least 32 bytes. Never commit `.env.local`.
-
-Database commands accept `DATABASE_URL_UNPOOLED` first and fall back to `DATABASE_URL`. They refuse placeholder and non-Neon targets. The migration command performs a schema-readiness check after applying checked-in migrations.
 
 ## Verification
 
 ```bash
-npm run verify      # manual/protocol parity
-npm run test        # unit and component tests
-npm run typecheck
-npm run lint
-npm run build       # repeats the four gates above before Next.js build
-npm run test:e2e    # iPad portrait and landscape flows
+npm run verify:ci
+npm run build
+npm run test:e2e
 ```
 
-`npm run build` is intentionally strict. Do not weaken the manual parity fixture or review gates to make a change pass.
+`npm run build` runs protocol verification, unit/component tests, type checking, and lint before the Next.js production build.
 
-## Data authority
+## Persistence
 
-1. The source manual controls exercise identity, order, wording, dosage, safety meaning, ergonomics, and program phases.
-2. `data/protocol.v2.json` is the canonical application representation.
-3. `lib/protocol-schema.ts` validates the complete boundary and cross-references.
-4. `scripts/verify-protocol.mjs` independently checks the exact 33-exercise manifest.
-5. Video records never override the protocol.
+The app remains usable without environment variables and stores progress locally. Configure Neon and a session secret for cloud synchronization. Database clients are initialized lazily and no database client is created at module scope.
 
-The invariant is 7 shoulders/neck + 6 spine/core + 6 hips + 7 knees/ankles + 7 hands/wrists = 33.
-
-## Video review gate
-
-Twenty exercise candidates and one reset candidate are stored in `lib/videos.ts`. Every record starts as `candidate` and is invisible in the interface. A video appears only after a human reviewer records all required approval evidence and changes it to `verified`.
-
-## Persistence model
-
-The current release uses a signed, HTTP-only anonymous-device identifier. Session data is isolated by participant ID, writes are idempotent, and the browser keeps an offline queue. See `docs/ARCHITECTURE.md` before adding account authentication or cross-device identity.
-
-## Medical scope
-
-This product is educational and organizational. It does not diagnose, treat, or replace individual evaluation. Red-flag symptoms and the 24-hour response rule remain visible through Stop rules and symptom guidance.
+See `V5_MERGE_NOTES.md` for the exact merge scope and known environment limitation.

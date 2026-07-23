@@ -5,7 +5,7 @@ import { protocol } from '@/lib/protocol';
 import type { PracticeSessionInput } from '@/lib/progress';
 import { GuidedSession } from '../GuidedSession';
 
-export function RoutineView({ routineId, eyebrow, onSave }: { routineId: string; eyebrow: string; onSave: (session: PracticeSessionInput) => Promise<void> }) {
+export function RoutineView({ routineId, eyebrow, onSave, onOpenSafety }: { routineId: string; eyebrow: string; onSave: (session: PracticeSessionInput) => Promise<void>; onOpenSafety: () => void }) {
   const routine = protocol.routines.find((item) => item.id === routineId);
   if (!routine) return null;
 
@@ -32,6 +32,7 @@ export function RoutineView({ routineId, eyebrow, onSave }: { routineId: string;
           items: routine.items,
         }}
         onSave={onSave}
+        onOpenSafety={onOpenSafety}
       />
     </div>
   );

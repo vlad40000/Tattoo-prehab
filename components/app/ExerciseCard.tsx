@@ -6,17 +6,35 @@ import { BEST_USE_LABELS, type Exercise } from '@/lib/protocol';
 import { videoForExercise } from '@/lib/videos';
 import { ExerciseVideoButton } from './ExerciseVideoButton';
 
-export function ExerciseCard({ exercise, prescription, open, onToggle }: { exercise: Exercise; prescription?: string; open: boolean; onToggle: () => void }) {
+export function ExerciseCard({
+  exercise,
+  prescription,
+  open,
+  onToggle,
+  index,
+}: {
+  exercise: Exercise;
+  prescription?: string;
+  open: boolean;
+  onToggle: () => void;
+  index?: number;
+}) {
+  const video = videoForExercise(exercise.id);
+
   return (
     <article className={`exercise-card ${open ? 'is-open' : ''}`}>
-      <button type="button" className="exercise-card__toggle" onClick={onToggle} aria-expanded={open}>
-        <span>
-          <small>§{exercise.manual_ref}</small>
-          <strong>{exercise.exercise_name}</strong>
-          <em>{prescription ?? exercise.dose}</em>
-        </span>
-        <ChevronDown size={19} aria-hidden />
-      </button>
+      <div className="exercise-card__head">
+        <button type="button" className="exercise-card__toggle" onClick={onToggle} aria-expanded={open}>
+          {index !== undefined && <span className="exercise-card__index">{String(index).padStart(2, '0')}</span>}
+          <span className="exercise-card__copy">
+            <small>§{exercise.manual_ref}</small>
+            <strong>{exercise.exercise_name}</strong>
+            <em>{prescription ?? exercise.dose}</em>
+          </span>
+          <ChevronDown size={19} aria-hidden />
+        </button>
+        <ExerciseVideoButton video={video} exerciseName={exercise.exercise_name} compact />
+      </div>
       {open && (
         <div className="exercise-card__body">
           {exercise.hand_fatigue && (
@@ -51,7 +69,6 @@ export function ExerciseCard({ exercise, prescription, open, onToggle }: { exerc
           <div className="use-row">
             {exercise.best_use.map((use) => <span key={use}>{BEST_USE_LABELS[use]}</span>)}
           </div>
-          <ExerciseVideoButton video={videoForExercise(exercise.id)} exerciseName={exercise.exercise_name} />
         </div>
       )}
     </article>

@@ -22,6 +22,8 @@ export type RigPart = {
   args: number[];
   pos: [number, number, number];
   rot?: [number, number, number];
+  /** Non-uniform scale — lets spheres become silhouette ellipsoids. */
+  scale?: [number, number, number];
   /** Duplicate the part with x negated. */
   mirror?: boolean;
 };
@@ -31,14 +33,27 @@ const P = (
   geom: Geom,
   args: number[],
   pos: [number, number, number],
-  opts: { rot?: [number, number, number]; mirror?: boolean } = {}
+  opts: { rot?: [number, number, number]; scale?: [number, number, number]; mirror?: boolean } = {}
 ): RigPart => ({ id, geom, args, pos, ...opts });
 
 export const RIG_PARTS: RigPart[] = [
-  /* ---------------- Structural scaffolding (never highlights) ------------- */
-  P(null, 'cylinder', [0.05, 0.05, 1.0, 8], [0, 2.4, -0.06]), // spine column
-  P(null, 'box', [0.42, 0.22, 0.26], [0, 1.62, 0]), // pelvis
-  P(null, 'capsule', [0.06, 0.42, 6, 10], [0.17, 0.86, 0], { mirror: true }), // knee/shank core
+  /* ---------------- Structural silhouette (never highlights) --------------
+     These shells give the figure a continuous human read so the muscle nodes
+     sit ON a body instead of floating in space. Sized to stay just inside
+     the muscle overlays. */
+  P(null, 'cylinder', [0.05, 0.05, 1.0, 10], [0, 2.4, -0.06]), // spine column
+  P(null, 'cylinder', [0.09, 0.11, 0.34, 14], [0, 3.4, -0.01]), // neck
+  P(null, 'sphere', [1, 26, 20], [0, 2.58, 0], { scale: [0.3, 0.4, 0.19] }), // ribcage
+  P(null, 'sphere', [1, 22, 18], [0, 2.06, 0.01], { scale: [0.235, 0.3, 0.15] }), // abdomen
+  P(null, 'sphere', [1, 22, 18], [0, 1.58, -0.02], { scale: [0.27, 0.21, 0.18] }), // pelvis
+  P(null, 'capsule', [0.06, 0.26, 6, 12], [0.67, 2.3, -0.02], { mirror: true }), // upper-arm core
+  P(null, 'sphere', [0.075, 14, 12], [0.68, 2.08, 0], { mirror: true }), // elbow
+  P(null, 'capsule', [0.05, 0.24, 6, 10], [0.685, 1.85, 0.005], { mirror: true }), // forearm core
+  P(null, 'sphere', [0.055, 12, 10], [0.69, 1.66, 0], { mirror: true }), // wrist
+  P(null, 'sphere', [0.09, 14, 12], [0.17, 1.52, 0], { mirror: true }), // hip joint
+  P(null, 'sphere', [0.095, 14, 12], [0.17, 0.9, 0], { mirror: true }), // knee
+  P(null, 'capsule', [0.055, 0.46, 6, 10], [0.17, 0.56, -0.01], { mirror: true }), // shank core
+  P(null, 'sphere', [0.06, 12, 10], [0.16, 0.22, 0.02], { mirror: true }), // ankle
   P(null, 'box', [0.13, 0.08, 0.3], [0.17, 0.12, 0.06], { mirror: true }), // foot plate
 
   /* ---------------- Head & cervical --------------------------------------- */

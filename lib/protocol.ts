@@ -55,7 +55,12 @@ export function sessionsForPhase(phase: Phase): Phase['sessions'] {
   return parent ? parent.sessions : [];
 }
 
-export type MuscleState = { primary: string[]; secondary: string[] };
+export type MuscleState = {
+  primary: string[];
+  secondary: string[];
+  /** Muscles available to tap in the active anatomy region. */
+  candidate?: string[];
+};
 export const EMPTY_MUSCLE_STATE: MuscleState = { primary: [], secondary: [] };
 
 export function muscleStateFor(exercise: Exercise | null): MuscleState {

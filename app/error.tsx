@@ -10,7 +10,7 @@ export default function ErrorPage({
   reset: () => void;
 }) {
   useEffect(() => {
-    console.error('[machine-hand] client render failed', error);
+    console.error('[tattoo-prehab] client render failed', error);
   }, [error]);
 
   return (

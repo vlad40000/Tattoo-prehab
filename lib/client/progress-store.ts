@@ -3,8 +3,10 @@
 import { useCallback, useEffect, useState } from 'react';
 import type { PracticeSessionInput, ProgressSummary, SymptomCheckinInput } from '@/lib/progress';
 
-const SESSION_KEY = 'machine-hand:sessions:v1';
-const CHECKIN_KEY = 'machine-hand:checkins:v1';
+const SESSION_KEY = 'tattoo-prehab:sessions:v1';
+const CHECKIN_KEY = 'tattoo-prehab:checkins:v1';
+const LEGACY_SESSION_KEY = 'machine-hand:sessions:v1';
+const LEGACY_CHECKIN_KEY = 'machine-hand:checkins:v1';
 
 type StoredSession = PracticeSessionInput & { synced: boolean };
 
@@ -24,7 +26,7 @@ function isStoredSession(value: unknown): value is StoredSession {
 }
 
 function readStoredSessions(): StoredSession[] {
-  const parsed = readJson<unknown>(SESSION_KEY, []);
+  const parsed = readJson<unknown>(SESSION_KEY, readJson<unknown>(LEGACY_SESSION_KEY, []));
   if (!Array.isArray(parsed)) return [];
   return parsed.filter(isStoredSession);
 }
@@ -148,7 +150,7 @@ export function useProgress() {
 }
 
 export async function saveCheckin(input: SymptomCheckinInput) {
-  const parsed = readJson<unknown>(CHECKIN_KEY, []);
+  const parsed = readJson<unknown>(CHECKIN_KEY, readJson<unknown>(LEGACY_CHECKIN_KEY, []));
   const stored = Array.isArray(parsed) ? (parsed as SymptomCheckinInput[]) : [];
   writeJson(CHECKIN_KEY, [...stored, input].slice(-200));
   try {

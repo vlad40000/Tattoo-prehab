@@ -37,6 +37,17 @@ export function exercisesForMuscle(id: MuscleId): readonly Exercise[] {
   });
 }
 
+/** Every muscle any exercise in the region recruits — the tappable set. */
+export function musclesForRegion(region: { exercises: readonly Exercise[] }): MuscleId[] {
+  const out = new Set<MuscleId>();
+  for (const exercise of region.exercises) {
+    for (const muscle of [...exercise.primary_muscles, ...exercise.secondary_muscles]) {
+      out.add(muscle as MuscleId);
+    }
+  }
+  return [...out];
+}
+
 export function isPrimaryFor(exercise: Exercise, id: MuscleId): boolean {
   return exercise.primary_muscles.includes(id);
 }

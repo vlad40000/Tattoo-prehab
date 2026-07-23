@@ -13,7 +13,7 @@ type OrbitLike = { target: THREE.Vector3; update: () => void };
  * flies the camera to the forearm; selecting a spine exercise pulls back to the
  * torso. Any manual drag cancels the flight immediately so the user always wins.
  */
-export default function CameraRig({ focus }: { focus: FocusKey }) {
+export default function CameraRig({ focus, idle = false }: { focus: FocusKey; idle?: boolean }) {
   const wantPos = useRef(new THREE.Vector3(...FOCUS_PRESETS.full.position));
   const wantTarget = useRef(new THREE.Vector3(...FOCUS_PRESETS.full.target));
   const flying = useRef(false);
@@ -47,9 +47,14 @@ export default function CameraRig({ focus }: { focus: FocusKey }) {
     }
   });
 
+  const reduce =
+    typeof window !== 'undefined' && window.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
+
   return (
     <OrbitControls
       makeDefault
+      autoRotate={idle && !reduce}
+      autoRotateSpeed={0.55}
       enablePan
       enableDamping
       dampingFactor={0.08}

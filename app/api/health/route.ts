@@ -10,7 +10,7 @@ export async function GET() {
   return NextResponse.json(
     {
       ok,
-      service: 'machine-hand',
+      service: 'tattoo-prehab',
       persistence,
     },
     { status: ok ? 200 : 503, headers: { 'Cache-Control': 'no-store' } },

@@ -1,18 +1,23 @@
 'use client';
 
 import { useEffect, useMemo, useState } from 'react';
-import { Check, ChevronLeft, ChevronRight, Circle, Pause, Play, RotateCcw } from 'lucide-react';
+import { Check, PauseCircle, Play, RotateCcw, Trash2 } from 'lucide-react';
 import { findExercise } from '@/lib/protocol';
 import type { PracticeSessionInput } from '@/lib/progress';
+import { isExerciseComplete } from '@/lib/session-completion';
+import { videoForResetStep } from '@/lib/videos';
 import { ExerciseCard } from './ExerciseCard';
+import { ExerciseVideoButton } from './ExerciseVideoButton';
+import { SessionRunner, type RunnerEntry } from './SessionRunner';
 import type { SessionDefinition } from './types';
 
 type Stage = 'overview' | 'active' | 'finish' | 'complete';
 
-export function GuidedSession({ definition, onSave }: { definition: SessionDefinition; onSave: (session: PracticeSessionInput) => Promise<void> }) {
+export function GuidedSession({ definition, onSave, onOpenSafety }: { definition: SessionDefinition; onSave: (session: PracticeSessionInput) => Promise<void>; onOpenSafety: () => void }) {
   const [stage, setStage] = useState<Stage>('overview');
-  const [activeIndex, setActiveIndex] = useState(0);
-  const [completed, setCompleted] = useState<Set<number>>(new Set());
+  const [previewIndex, setPreviewIndex] = useState(0);
+  const [runnerIndex, setRunnerIndex] = useState(0);
+  const [completed, setCompleted] = useState<Set<string>>(new Set());
   const [elapsed, setElapsed] = useState(0);
   const [running, setRunning] = useState(false);
   const [startedAt, setStartedAt] = useState<string | null>(null);
@@ -21,7 +26,9 @@ export function GuidedSession({ definition, onSave }: { definition: SessionDefin
   const [notes, setNotes] = useState('');
 
   const exercises = useMemo(
-    () => definition.items.map((item) => ({ item, exercise: findExercise(item.exercise_id) })).filter((entry) => entry.exercise !== null),
+    () => definition.items
+      .map((item) => ({ item, exercise: findExercise(item.exercise_id) }))
+      .filter((entry): entry is RunnerEntry => entry.exercise !== null),
     [definition.items],
   );
 
@@ -31,20 +38,55 @@ export function GuidedSession({ definition, onSave }: { definition: SessionDefin
     return () => window.clearInterval(id);
   }, [running, stage]);
 
-  const start = () => {
+  const clearDraft = () => {
+    setStage('overview');
+    setPreviewIndex(0);
+    setRunnerIndex(0);
+    setCompleted(new Set());
+    setElapsed(0);
+    setRunning(false);
+    setStartedAt(null);
+    setZone('green');
+    setPainAfter(null);
+    setNotes('');
+  };
+
+  const startFresh = () => {
+    setRunnerIndex(0);
+    setCompleted(new Set());
+    setElapsed(0);
+    setZone('green');
+    setPainAfter(null);
+    setNotes('');
     setStartedAt(new Date().toISOString());
     setStage('active');
     setRunning(true);
   };
 
-  const toggleDone = (index: number) => {
+  const resume = () => {
+    if (!startedAt) {
+      startFresh();
+      return;
+    }
+    setStage('active');
+    setRunning(true);
+  };
+
+  const toggleSet = (key: string) => {
     setCompleted((previous) => {
       const next = new Set(previous);
-      if (next.has(index)) next.delete(index);
-      else next.add(index);
+      if (next.has(key)) next.delete(key);
+      else next.add(key);
       return next;
     });
   };
+
+  const exerciseDone = (index: number) => {
+    const entry = exercises[index];
+    return entry ? isExerciseComplete(completed, index, entry.item, entry.exercise) : false;
+  };
+
+  const completedExerciseCount = exercises.filter((_, index) => exerciseDone(index)).length;
 
   const submit = async () => {
     const now = new Date().toISOString();
@@ -59,46 +101,68 @@ export function GuidedSession({ definition, onSave }: { definition: SessionDefin
       trafficLight: zone,
       painAfter,
       notes: notes || null,
-      items: definition.items.map((item, index) => ({
-        exerciseId: item.exercise_id,
-        prescription: item.prescription,
-        completed: completed.has(index),
+      items: exercises.map((entry, index) => ({
+        exerciseId: entry.item.exercise_id,
+        prescription: entry.item.prescription,
+        completed: exerciseDone(index),
       })),
     };
     await onSave(input);
     setStage('complete');
   };
 
-  const reset = () => {
-    setStage('overview');
-    setActiveIndex(0);
-    setCompleted(new Set());
-    setElapsed(0);
-    setRunning(false);
-    setStartedAt(null);
-    setZone('green');
-    setPainAfter(null);
-    setNotes('');
-  };
-
   if (stage === 'overview') {
+    const hasDraft = startedAt !== null;
     return (
       <div className="session-overview">
         {definition.leadIn && <p className="lead-in">{definition.leadIn}</p>}
         {definition.warning && <p className="routine-warning">{definition.warning}</p>}
         {definition.steps && (
           <ol className="reset-steps">
-            {definition.steps.map((step) => <li key={step}>{step}</li>)}
+            {definition.steps.map((step) => (
+              <li key={step}>
+                <span>{step}</span>
+                <ExerciseVideoButton video={videoForResetStep(step)} exerciseName="Slow shoulder-blade circles" compact />
+              </li>
+            ))}
           </ol>
         )}
+
+        {hasDraft && (
+          <section className="session-draft" aria-label="Paused session">
+            <div>
+              <PauseCircle size={21} aria-hidden />
+              <span><strong>Session paused</strong><small>{completedExerciseCount}/{exercises.length} movements fully completed · {Math.floor(elapsed / 60)}:{String(elapsed % 60).padStart(2, '0')}</small></span>
+            </div>
+            <div className="session-draft__actions">
+              <button type="button" className="primary-action" onClick={resume}><Play size={17} fill="currentColor" aria-hidden /> Resume</button>
+              <button type="button" className="secondary-action" onClick={startFresh}><RotateCcw size={17} aria-hidden /> Restart</button>
+              <button type="button" className="danger-action" onClick={clearDraft}><Trash2 size={17} aria-hidden /> Discard</button>
+            </div>
+          </section>
+        )}
+
         <div className="routine-list">
-          {exercises.map(({ item, exercise }, index) => exercise && (
-            <ExerciseCard key={`${item.exercise_id}-${index}`} exercise={exercise} prescription={item.prescription} open={activeIndex === index} onToggle={() => setActiveIndex(activeIndex === index ? -1 : index)} />
+          {exercises.map(({ item, exercise }, index) => (
+            <ExerciseCard
+              key={`${item.exercise_id}-${index}`}
+              exercise={exercise}
+              prescription={item.prescription}
+              index={index + 1}
+              open={previewIndex === index}
+              onToggle={() => setPreviewIndex(previewIndex === index ? -1 : index)}
+            />
           ))}
         </div>
-        <button type="button" className="primary-action" onClick={start}>
-          <Play size={18} fill="currentColor" aria-hidden /> Start guided session
-        </button>
+
+        {!hasDraft && (
+          <div className="session-start-bar">
+            <div><strong>Ready when you are.</strong><span>The timer starts only after you begin.</span></div>
+            <button type="button" className="primary-action" onClick={startFresh}>
+              <Play size={18} fill="currentColor" aria-hidden /> Start guided session
+            </button>
+          </div>
+        )}
       </div>
     );
   }
@@ -110,7 +174,7 @@ export function GuidedSession({ definition, onSave }: { definition: SessionDefin
         <p className="kicker">Session recorded</p>
         <h2>Leave with capacity in reserve.</h2>
         <p>The goal is improved coordination and tolerance—not earning fatigue.</p>
-        <button type="button" className="secondary-action" onClick={reset}><RotateCcw size={17} aria-hidden /> Run again</button>
+        <button type="button" className="secondary-action" onClick={clearDraft}><RotateCcw size={17} aria-hidden /> Run again</button>
       </div>
     );
   }
@@ -120,6 +184,7 @@ export function GuidedSession({ definition, onSave }: { definition: SessionDefin
       <div className="finish-card">
         <p className="kicker">24-hour feedback starts now</p>
         <h2>How did the session leave you?</h2>
+        <p className="finish-card__intro">{completedExerciseCount} of {exercises.length} movements were fully completed. Partial work remains recorded as incomplete.</p>
         <div className="finish-zones" role="radiogroup" aria-label="Post-session status">
           {(['green', 'yellow', 'red'] as const).map((value) => (
             <button key={value} type="button" role="radio" aria-checked={zone === value} className={`finish-zone finish-zone--${value} ${zone === value ? 'is-selected' : ''}`} onClick={() => setZone(value)}>
@@ -132,43 +197,26 @@ export function GuidedSession({ definition, onSave }: { definition: SessionDefin
         <label className="field-label" htmlFor="session-notes">Optional note</label>
         <textarea id="session-notes" maxLength={1000} value={notes} onChange={(event) => setNotes(event.target.value)} placeholder="What felt better, harder, or different?" />
         <div className="button-row">
-          <button type="button" className="secondary-action" onClick={() => setStage('active')}>Back</button>
+          <button type="button" className="secondary-action" onClick={() => { setStage('active'); setRunning(true); }}>Back</button>
           <button type="button" className="primary-action" onClick={() => void submit()}>Save session</button>
         </div>
       </div>
     );
   }
 
-  const current = exercises[activeIndex];
-  if (!current?.exercise) return null;
   return (
-    <div className="runner">
-      <div className="runner__status">
-        <span>Step {activeIndex + 1} of {exercises.length}</span>
-        <strong>{formatTime(elapsed)}</strong>
-        <button type="button" onClick={() => setRunning((value) => !value)} aria-label={running ? 'Pause timer' : 'Resume timer'}>
-          {running ? <Pause size={17} fill="currentColor" aria-hidden /> : <Play size={17} fill="currentColor" aria-hidden />}
-        </button>
-      </div>
-      <div className="runner__progress" aria-hidden><span style={{ width: `${((activeIndex + 1) / exercises.length) * 100}%` }} /></div>
-      <ExerciseCard exercise={current.exercise} prescription={current.item.prescription} open onToggle={() => undefined} />
-      <button type="button" className={`complete-step ${completed.has(activeIndex) ? 'is-complete' : ''}`} onClick={() => toggleDone(activeIndex)}>
-        {completed.has(activeIndex) ? <Check size={20} aria-hidden /> : <Circle size={20} aria-hidden />}
-        {completed.has(activeIndex) ? 'Marked complete' : 'Mark this step complete'}
-      </button>
-      <div className="runner__nav">
-        <button type="button" className="secondary-action" disabled={activeIndex === 0} onClick={() => setActiveIndex((value) => value - 1)}><ChevronLeft size={18} aria-hidden /> Previous</button>
-        {activeIndex < exercises.length - 1 ? (
-          <button type="button" className="primary-action" onClick={() => setActiveIndex((value) => value + 1)}>Next <ChevronRight size={18} aria-hidden /></button>
-        ) : (
-          <button type="button" className="primary-action" onClick={() => { setRunning(false); setStage('finish'); }}>Finish session</button>
-        )}
-      </div>
-    </div>
+    <SessionRunner
+      entries={exercises}
+      activeIndex={runnerIndex}
+      onActiveIndexChange={setRunnerIndex}
+      elapsed={elapsed}
+      running={running}
+      onToggleRunning={() => setRunning((value) => !value)}
+      completed={completed}
+      onToggleSet={toggleSet}
+      onExit={() => { setRunning(false); setStage('overview'); }}
+      onOpenSafety={onOpenSafety}
+      onFinish={() => { setRunning(false); setStage('finish'); }}
+    />
   );
-}
-
-function formatTime(seconds: number) {
-  const minutes = Math.floor(seconds / 60).toString().padStart(2, '0');
-  return `${minutes}:${(seconds % 60).toString().padStart(2, '0')}`;
 }

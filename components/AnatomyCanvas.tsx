@@ -90,19 +90,24 @@ function Scene({
       <color attach="background" args={['#02060f']} />
       <fog attach="fog" args={['#02060f', 9, 26]} />
 
-      <ambientLight intensity={0.4} color="#16304f" />
-      <directionalLight position={[4, 8, 5]} intensity={1.1} color="#dcecff" />
-      <directionalLight position={[-4, 2, -5]} intensity={0.4} color="#3c5da0" />
+      <ambientLight intensity={0.5} color="#1a3a5f" />
+      <directionalLight position={[4, 8, 5]} intensity={1.25} color="#e4f1ff" />
+      <directionalLight position={[-4, 2, -5]} intensity={0.5} color="#3c5da0" />
+      <directionalLight position={[0, 5, -7]} intensity={0.9} color="#1f7fae" />
       <pointLight position={[0, 3.2, 2.4]} intensity={0.9} color="#00c8ff" distance={14} decay={2} />
       <pointLight position={[0, -1.6, 2]} intensity={0.35} color="#7a34c0" distance={10} decay={2} />
 
-      <Stars radius={70} depth={34} count={900} factor={2} saturation={0.25} fade speed={0.35} />
+      <Stars radius={70} depth={34} count={650} factor={2} saturation={0.15} fade speed={0.3} />
 
       <mesh position={[0, -1.06, 0]} rotation={[-Math.PI / 2, 0, 0]} raycast={() => null}>
         <circleGeometry args={[3.2, 48]} />
         <meshStandardMaterial color="#040d18" roughness={1} transparent opacity={0.9} />
       </mesh>
       <gridHelper args={[14, 28, '#0b2136', '#061020']} position={[0, -1.05, 0]} />
+      <mesh position={[0, -1.045, 0]} rotation={[-Math.PI / 2, 0, 0]} raycast={() => null}>
+        <ringGeometry args={[0.85, 1.55, 48]} />
+        <meshBasicMaterial color="#0d4b63" transparent opacity={0.35} />
+      </mesh>
 
       <Suspense fallback={<CanvasLoader />}>
         {source === 'glb' ? (
@@ -114,7 +119,7 @@ function Scene({
         )}
       </Suspense>
 
-      <CameraRig focus={focus} />
+      <CameraRig focus={focus} idle={muscleState.primary.length === 0 && muscleState.secondary.length === 0} />
     </>
   );
 }
