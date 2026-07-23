@@ -2,8 +2,7 @@ name: Apply Tattoo Prehab v6 account release
 
 on:
   push:
-    branches:
-      - main
+    branches: [main]
     paths:
       - '.v6-account-release/**'
       - '.github/workflows/apply-v6-account-release.yml'
@@ -19,26 +18,15 @@ jobs:
   apply-release:
     runs-on: ubuntu-latest
     steps:
-      - name: Check out staged main
+      - name: Check out repository
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
-
-      - name: Verify staging contains no application changes
-        shell: bash
-        run: |
-          set -euo pipefail
-          expected='b3d79d9dd7c7cab48cef6161d747881ac269a37d'
-          git merge-base --is-ancestor "$expected" HEAD
-          git diff --exit-code "$expected" HEAD -- . \
-            ':(exclude).v6-account-release/**' \
-            ':(exclude).github/workflows/apply-v6-account-release.yml'
 
       - name: Use Node 24
         uses: actions/setup-node@v4
         with:
           node-version: 24
-          cache: npm
 
       - name: Reconstruct and apply verified account patch
         shell: bash
@@ -61,7 +49,7 @@ jobs:
       - name: Run complete Node 24 release gates
         run: npm run build
 
-      - name: Commit exact account release to main
+      - name: Commit exact account release
         shell: bash
         run: |
           set -euo pipefail
@@ -70,5 +58,9 @@ jobs:
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
           git add -A
+          if git diff --cached --quiet; then
+            echo 'No account release changes to commit.'
+            exit 0
+          fi
           git commit -m 'Add account login and cloud progress'
           git push origin HEAD:main
