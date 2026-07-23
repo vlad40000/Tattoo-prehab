@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import dynamic from 'next/dynamic';
 import {
   Activity,
   BookOpen,
@@ -15,13 +16,27 @@ import {
 } from 'lucide-react';
 import { SafetyModal } from '@/components/SafetyModal';
 import { useProgress } from '@/lib/client/progress-store';
-import { LearnView } from './views/LearnView';
 import { RoutineView } from './views/RoutineView';
 import { StrengthView } from './views/StrengthView';
 import { SymptomsView } from './views/SymptomsView';
 import { TodayView } from './views/TodayView';
 import { WorkstationView } from './views/WorkstationView';
 import type { AppView } from './types';
+
+// The anatomy view owns the complete Three.js/WebGL dependency tree. Loading it
+// with the home screen can make an unsupported WebGL/browser environment take
+// down the entire application before the user ever opens Learn.
+const LearnView = dynamic(
+  () => import('./views/LearnView').then((module) => module.LearnView),
+  {
+    ssr: false,
+    loading: () => (
+      <div className="page" role="status" aria-live="polite">
+        <p className="loading-label">Loading anatomy…</p>
+      </div>
+    ),
+  },
+);
 
 const navigation = [
   { id: 'today', label: 'Today', icon: CircleGauge },

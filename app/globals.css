@@ -27,6 +27,28 @@
 }
 
 * { box-sizing: border-box; }
+
+.app-error {
+  min-height: 100dvh;
+  display: grid;
+  place-content: center;
+  gap: 1rem;
+  padding: 2rem;
+  text-align: center;
+  background: #02060f;
+  color: #e8f1ff;
+}
+
+.app-error button {
+  min-height: 44px;
+  justify-self: center;
+  padding: 0.75rem 1.25rem;
+  border: 1px solid #38bdf8;
+  border-radius: 0.75rem;
+  background: #0c4a6e;
+  color: white;
+  cursor: pointer;
+}
 html { min-height: 100%; background: var(--bg); scroll-behavior: smooth; }
 body { min-height: 100%; margin: 0; background: var(--bg); color: var(--text); font-family: var(--font-ui); }
 button, input, select, textarea { font: inherit; }

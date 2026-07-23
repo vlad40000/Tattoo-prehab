@@ -8,6 +8,27 @@ const CHECKIN_KEY = 'machine-hand:checkins:v1';
 
 type StoredSession = PracticeSessionInput & { synced: boolean };
 
+function isStoredSession(value: unknown): value is StoredSession {
+  if (!value || typeof value !== 'object') return false;
+  const item = value as Record<string, unknown>;
+  return (
+    typeof item.idempotencyKey === 'string' &&
+    typeof item.sourceLabel === 'string' &&
+    typeof item.completedAt === 'string' &&
+    !Number.isNaN(Date.parse(item.completedAt)) &&
+    typeof item.durationSeconds === 'number' &&
+    Number.isFinite(item.durationSeconds) &&
+    (item.trafficLight === 'green' || item.trafficLight === 'yellow' || item.trafficLight === 'red') &&
+    typeof item.synced === 'boolean'
+  );
+}
+
+function readStoredSessions(): StoredSession[] {
+  const parsed = readJson<unknown>(SESSION_KEY, []);
+  if (!Array.isArray(parsed)) return [];
+  return parsed.filter(isStoredSession);
+}
+
 function readJson<T>(key: string, fallback: T): T {
   try {
     const value = window.localStorage.getItem(key);
@@ -88,7 +109,7 @@ export function useProgress() {
   const [loading, setLoading] = useState(true);
 
   const refresh = useCallback(async () => {
-    const stored = readJson<StoredSession[]>(SESSION_KEY, []);
+    const stored = readStoredSessions();
     const pending = stored.filter((item) => !item.synced);
     if (pending.length) {
       const synced = new Set<string>();
@@ -102,7 +123,7 @@ export function useProgress() {
     }
 
     const cloud = await fetchCloudSummary();
-    setSummary(cloud?.mode === 'cloud' ? cloud : localSummary(readJson<StoredSession[]>(SESSION_KEY, [])));
+    setSummary(cloud?.mode === 'cloud' ? cloud : localSummary(readStoredSessions()));
     setLoading(false);
   }, []);
 
@@ -112,7 +133,7 @@ export function useProgress() {
 
   const saveSession = useCallback(
     async (input: PracticeSessionInput) => {
-      const stored = readJson<StoredSession[]>(SESSION_KEY, []);
+      const stored = readStoredSessions();
       if (!stored.some((item) => item.idempotencyKey === input.idempotencyKey)) {
         const updated = [...stored, { ...input, synced: false }];
         writeJson(SESSION_KEY, updated.slice(-200));
@@ -127,7 +148,8 @@ export function useProgress() {
 }
 
 export async function saveCheckin(input: SymptomCheckinInput) {
-  const stored = readJson<SymptomCheckinInput[]>(CHECKIN_KEY, []);
+  const parsed = readJson<unknown>(CHECKIN_KEY, []);
+  const stored = Array.isArray(parsed) ? (parsed as SymptomCheckinInput[]) : [];
   writeJson(CHECKIN_KEY, [...stored, input].slice(-200));
   try {
     await fetch('/api/checkins', {

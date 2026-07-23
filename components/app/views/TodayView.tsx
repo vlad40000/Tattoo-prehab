@@ -28,7 +28,7 @@ export function TodayView({
     <div className="page page--today">
       <header className="page-header">
         <div>
-          <p className="kicker">{date}</p>
+          <p className="kicker" suppressHydrationWarning>{date}</p>
           <h1>Protect the hand that does the work.</h1>
           <p className="lede">Small resets, better positioning, and enough strength to keep precision from becoming strain.</p>
         </div>
