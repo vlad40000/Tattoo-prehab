@@ -12,7 +12,7 @@ permissions:
 
 concurrency:
   group: tattoo-prehab-v6-account-release
-  cancel-in-progress: false
+  cancel-in-progress: true
 
 jobs:
   apply-release:
@@ -28,10 +28,11 @@ jobs:
         with:
           node-version: 24
 
-      - name: Reconstruct and apply verified account patch
+      - name: Reconstruct and apply verified account patches
         shell: bash
         run: |
           set -euo pipefail
+
           cat \
             .v6-account-release/payload/00 \
             .v6-account-release/payload/01 \
@@ -43,11 +44,24 @@ jobs:
             .v6-account-release/payload/05 \
             .v6-account-release/payload/06 \
             .v6-account-release/payload/07 \
-            | base64 --decode > /tmp/tattoo-prehab-v6-auth.patch.xz
-          echo 'efd2a259a829b892e59c350b0aec31fad800f621d1f291fa2c3e8cdd4d826c3c  /tmp/tattoo-prehab-v6-auth.patch.xz' | sha256sum -c -
-          xz --decompress --stdout /tmp/tattoo-prehab-v6-auth.patch.xz > /tmp/tattoo-prehab-v6-auth.patch
-          git apply --check /tmp/tattoo-prehab-v6-auth.patch
-          git apply --whitespace=nowarn /tmp/tattoo-prehab-v6-auth.patch
+            | base64 --decode > /tmp/tattoo-prehab-v6-tracked.patch.xz
+          echo 'efd2a259a829b892e59c350b0aec31fad800f621d1f291fa2c3e8cdd4d826c3c  /tmp/tattoo-prehab-v6-tracked.patch.xz' | sha256sum -c -
+          xz --decompress --stdout /tmp/tattoo-prehab-v6-tracked.patch.xz > /tmp/tattoo-prehab-v6-tracked.patch
+          git apply --check /tmp/tattoo-prehab-v6-tracked.patch
+          git apply --whitespace=nowarn /tmp/tattoo-prehab-v6-tracked.patch
+
+          cat \
+            .v6-account-release/newfiles/00 \
+            .v6-account-release/newfiles/01 \
+            .v6-account-release/newfiles/02 \
+            .v6-account-release/newfiles/03 \
+            .v6-account-release/newfiles/04 \
+            .v6-account-release/newfiles/05 \
+            | base64 --decode > /tmp/tattoo-prehab-v6-new-files.patch.xz
+          echo 'a6147dfe4238848ba87e94358b680c0cda50279ad51cd1a926a26347c228ece8  /tmp/tattoo-prehab-v6-new-files.patch.xz' | sha256sum -c -
+          xz --decompress --stdout /tmp/tattoo-prehab-v6-new-files.patch.xz > /tmp/tattoo-prehab-v6-new-files.patch
+          git apply --check /tmp/tattoo-prehab-v6-new-files.patch
+          git apply --whitespace=nowarn /tmp/tattoo-prehab-v6-new-files.patch
 
       - name: Update dependencies and database migration
         shell: bash
