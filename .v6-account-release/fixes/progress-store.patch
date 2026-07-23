@@ -1,0 +1,26 @@
+--- a/lib/client/progress-store.ts
++++ b/lib/client/progress-store.ts
+@@ -112,13 +112,19 @@
+ }
+ 
+ function sessionPayload(session: StoredSession): PracticeSessionInput {
+-  const { synced: _synced, scope: _scope, accountKey: _accountKey, ...input } = session;
+-  return input;
++  const input: Partial<StoredSession> = { ...session };
++  delete input.synced;
++  delete input.scope;
++  delete input.accountKey;
++  return input as PracticeSessionInput;
+ }
+ 
+ function checkinPayload(checkin: StoredCheckin): SymptomCheckinInput {
+-  const { synced: _synced, scope: _scope, accountKey: _accountKey, ...input } = checkin;
+-  return input;
++  const input: Partial<StoredCheckin> = { ...checkin };
++  delete input.synced;
++  delete input.scope;
++  delete input.accountKey;
++  return input as SymptomCheckinInput;
+ }
+ 
+ function localSummary(sessions: StoredSession[], state: ClientAccountState): ProgressSummary {
