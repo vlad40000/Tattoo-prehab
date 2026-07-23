@@ -32,7 +32,18 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          cat .v6-account-release/patch/* | base64 --decode > /tmp/tattoo-prehab-v6-auth.patch.xz
+          cat \
+            .v6-account-release/payload/00 \
+            .v6-account-release/payload/01 \
+            .v6-account-release/payload/02 \
+            .v6-account-release/payload/030 \
+            .v6-account-release/payload/031 \
+            .v6-account-release/payload/032 \
+            .v6-account-release/payload/04 \
+            .v6-account-release/payload/05 \
+            .v6-account-release/payload/06 \
+            .v6-account-release/payload/07 \
+            | base64 --decode > /tmp/tattoo-prehab-v6-auth.patch.xz
           echo 'efd2a259a829b892e59c350b0aec31fad800f621d1f291fa2c3e8cdd4d826c3c  /tmp/tattoo-prehab-v6-auth.patch.xz' | sha256sum -c -
           xz --decompress --stdout /tmp/tattoo-prehab-v6-auth.patch.xz > /tmp/tattoo-prehab-v6-auth.patch
           git apply --check /tmp/tattoo-prehab-v6-auth.patch
@@ -55,12 +66,9 @@ jobs:
           set -euo pipefail
           rm -rf .v6-account-release
           rm -f .github/workflows/apply-v6-account-release.yml
+          rm -rf app/api/release-tree app/api/release-actions
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
           git add -A
-          if git diff --cached --quiet; then
-            echo 'No account release changes to commit.'
-            exit 0
-          fi
           git commit -m 'Add account login and cloud progress'
           git push origin HEAD:main
