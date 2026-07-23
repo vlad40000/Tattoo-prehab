@@ -3,7 +3,7 @@ name: Apply Tattoo Prehab v6 account release
 on:
   push:
     branches:
-      - agent/account-login-release
+      - main
     paths:
       - '.v6-account-release/**'
       - '.github/workflows/apply-v6-account-release.yml'
@@ -19,22 +19,20 @@ jobs:
   apply-release:
     runs-on: ubuntu-latest
     steps:
-      - name: Check out release branch
+      - name: Check out staged main
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
-      - name: Verify production base has not moved
+      - name: Verify staging contains no application changes
         shell: bash
         run: |
           set -euo pipefail
           expected='b3d79d9dd7c7cab48cef6161d747881ac269a37d'
-          git fetch origin main
-          actual="$(git rev-parse origin/main)"
-          test "$actual" = "$expected" || {
-            echo "main moved: expected $expected, found $actual" >&2
-            exit 1
-          }
+          git merge-base --is-ancestor "$expected" HEAD
+          git diff --exit-code "$expected" HEAD -- . \
+            ':(exclude).v6-account-release/**' \
+            ':(exclude).github/workflows/apply-v6-account-release.yml'
 
       - name: Use Node 24
         uses: actions/setup-node@v4
