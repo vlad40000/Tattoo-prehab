@@ -63,6 +63,10 @@ jobs:
           git apply --check /tmp/tattoo-prehab-v6-new-files.patch
           git apply --whitespace=nowarn /tmp/tattoo-prehab-v6-new-files.patch
 
+          echo 'eb6b25f6a95028c6b8a7a1d41657e6efcf2ffc76aad78e29cda1089f9b67b02d  .v6-account-release/fixes/progress-store.patch' | sha256sum -c -
+          git apply --check .v6-account-release/fixes/progress-store.patch
+          git apply --whitespace=nowarn .v6-account-release/fixes/progress-store.patch
+
       - name: Update dependencies and database migration
         shell: bash
         run: |
