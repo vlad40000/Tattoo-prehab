@@ -36,9 +36,12 @@ The app runs in local-only mode when `DATABASE_URL` and `SESSION_SECRET` are abs
 
 ```bash
 npm run db:migrate
+npm run db:check
 ```
 
 Generate `SESSION_SECRET` with a cryptographically secure random generator; use at least 32 bytes. Never commit `.env.local`.
+
+Database commands accept `DATABASE_URL_UNPOOLED` first and fall back to `DATABASE_URL`. They refuse placeholder and non-Neon targets. The migration command performs a schema-readiness check after applying checked-in migrations.
 
 ## Verification
 

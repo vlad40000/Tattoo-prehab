@@ -1,13 +1,18 @@
 import { NextResponse } from 'next/server';
-import { isPersistenceConfigured } from '@/lib/db';
+import { persistenceHealth } from '@/lib/db';
 
-export function GET() {
+export const runtime = 'nodejs';
+
+export async function GET() {
+  const persistence = await persistenceHealth();
+  const ok = persistence !== 'unavailable';
+
   return NextResponse.json(
     {
-      ok: true,
+      ok,
       service: 'machine-hand',
-      persistence: isPersistenceConfigured() ? 'configured' : 'local-only',
+      persistence,
     },
-    { headers: { 'Cache-Control': 'no-store' } },
+    { status: ok ? 200 : 503, headers: { 'Cache-Control': 'no-store' } },
   );
 }

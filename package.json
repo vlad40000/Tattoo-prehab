@@ -17,8 +17,9 @@
     "verify:all": "npm run build && npm run test:e2e",
     "check": "npm run verify:ci",
     "db:generate": "drizzle-kit generate",
-    "db:migrate": "dotenv -e .env.local -- drizzle-kit migrate",
-    "db:studio": "dotenv -e .env.local -- drizzle-kit studio"
+    "db:check": "dotenv -e .env.local -- node scripts/check-database.mjs",
+    "db:migrate": "dotenv -e .env.local -- node scripts/migrate-database.mjs",
+    "db:studio": "dotenv -e .env.local -- node scripts/run-db-studio.mjs"
   },
   "dependencies": {
     "@neondatabase/serverless": "^1.0.2",

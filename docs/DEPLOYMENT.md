@@ -17,7 +17,8 @@ Do not connect Preview deployments to the Production database. Use a Neon develo
 
 | Variable | Exposure | Purpose |
 | --- | --- | --- |
-| `DATABASE_URL` | Server only | Neon pooled connection string |
+| `DATABASE_URL` | Server only | Neon pooled runtime connection string |
+| `DATABASE_URL_UNPOOLED` | Server only | Direct Neon connection preferred for migrations and schema tools |
 | `SESSION_SECRET` | Server only | Signs anonymous participant cookies; at least 32 characters |
 | `NEXT_PUBLIC_APP_URL` | Public | Canonical URL used in application metadata |
 
@@ -28,6 +29,7 @@ For a fresh database:
 ```bash
 vercel env pull .env.local --yes
 npm run db:migrate
+npm run db:check
 npm run build
 ```
 
@@ -47,7 +49,8 @@ Run additive/backward-compatible migrations before promoting code that requires 
 
 - GitHub Actions is green.
 - Vercel preview build is green.
-- `/api/health` reports `persistence: configured` in the target environment.
+- `npm run db:check` confirms all four required tables.
+- `/api/health` reports `persistence: ready` in the target environment; `configured` is not accepted because it does not prove connectivity or schema readiness.
 - Neon migrations match the checked-in journal.
 - Prepare, Reset, Recover, Strength, Workstation, Symptoms, and Learn pass at 1024×1366 and 1366×1024.
 - Candidate videos produce no button or iframe.
